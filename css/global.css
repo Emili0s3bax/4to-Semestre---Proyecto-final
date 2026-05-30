@@ -1,0 +1,270 @@
+:root {
+    --pinterest-red: #e60023;
+    --pinterest-red-hover: #b6001a;
+    --gray-light: #efefef;
+    --gray-hover: #e2e2e2;
+    --text-dark: #111111;
+    --text-muted: #5f5f5f;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-family); color: var(--text-dark); background-color: #ffffff; min-height: 100vh; }
+
+/* LAYOUT: BARRA LATERAL (DESKTOP) */
+.pinterest-sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 88px;
+    background: #ffffff; border-right: 1px solid #efefef;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: space-between; padding: 24px 0; z-index: 1000;
+}
+.sidebar-logo {
+    color: var(--pinterest-red); font-size: 32px; font-weight: bold;
+    text-decoration: none; display: flex; align-items: center;
+    justify-content: center; width: 56px; height: 56px; border-radius: 50%;
+    transition: background-color 0.2s;
+}
+.sidebar-logo:hover { background-color: var(--gray-light); }
+
+.sidebar-nav-items {
+    display: flex; flex-direction: column; gap: 16px; align-items: center;
+    flex-grow: 1; margin-top: 32px; width: 100%;
+}
+.sidebar-item {
+    background: transparent; border: none; cursor: pointer;
+    width: 50px; height: 50px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 22px;
+    color: var(--text-dark); text-decoration: none; position: relative;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.sidebar-item:hover { background-color: var(--gray-light); }
+.sidebar-item.active { background-color: var(--text-dark); color: #ffffff; }
+.sidebar-item:active { transform: scale(0.95); }
+
+/* Badges para notificaciones */
+.sidebar-item .badge {
+    position: absolute; top: 4px; right: 4px; background-color: var(--pinterest-red);
+    color: white; font-size: 10px; font-weight: bold; border-radius: 50%;
+    width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+    border: 2px solid white;
+}
+
+.sidebar-profile-section {
+    display: flex; flex-direction: column; align-items: center; width: 100%;
+}
+.nav-profile-pic {
+    width: 48px; height: 48px; border-radius: 50%; background-color: var(--text-dark);
+    color: white; display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-weight: bold; font-size: 16px; border: none;
+    transition: transform 0.1s, box-shadow 0.2s;
+}
+.nav-profile-pic:hover { transform: scale(1.05); }
+.active-profile { box-shadow: 0 0 0 4px var(--pinterest-red); }
+
+/* TOPBAR: BUSCADOR (DESKTOP) */
+.pinterest-topbar {
+    position: fixed; top: 0; left: 88px; right: 0; height: 80px;
+    background: #ffffff; display: flex; align-items: center;
+    padding: 0 24px; z-index: 999; border-bottom: 1px solid #f6f6f6;
+}
+.nav-search-bar { flex-grow: 1; display: flex; align-items: center; }
+.nav-search-bar input {
+    width: 100%; height: 48px; background-color: var(--gray-light);
+    border: none; border-radius: 24px; padding: 0 24px; font-size: 16px;
+    outline: none; transition: background-color 0.2s, box-shadow 0.2s;
+}
+.nav-search-bar input:focus {
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 118, 211, 0.15);
+    border: 1px solid rgba(0, 118, 211, 0.2);
+}
+
+/* CATEGORIES BAR BELOW TOPBAR */
+.categories-scroll-wrapper {
+    width: 100%; max-width: 100%; margin: 0;
+    padding: 15px 24px; display: flex; align-items: center; gap: 10px;
+    overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none;
+}
+.categories-scroll-wrapper::-webkit-scrollbar { display: none; }
+.cat-pill {
+    background-color: var(--gray-light); color: var(--text-dark); border: none;
+    padding: 10px 20px; border-radius: 20px; font-size: 15px; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: background-color 0.2s, transform 0.1s;
+}
+.cat-pill:hover { background-color: var(--gray-hover); }
+.cat-pill.active { background-color: var(--text-dark); color: #ffffff; }
+.cat-pill:active { transform: scale(0.96); }
+
+/* CONTENIDO PRINCIPAL OFFSET */
+.feed-container {
+    padding: 95px 24px 24px 112px; /* 88px sidebar + 24px margin */
+    min-height: 100vh;
+}
+
+/* AUTH BUTTONS IN SIDEBAR (DESKTOP) */
+.auth-sidebar-buttons {
+    display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0 8px;
+}
+.auth-sidebar-btn {
+    width: 100%; padding: 10px 4px; border: none; border-radius: 12px;
+    font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: none;
+    text-align: center; white-space: nowrap;
+}
+.auth-sidebar-btn.login { background-color: var(--pinterest-red); color: white; }
+.auth-sidebar-btn.login:hover { background-color: var(--pinterest-red-hover); }
+.auth-sidebar-btn.register { background-color: var(--gray-light); color: var(--text-dark); }
+.auth-sidebar-btn.register:hover { background-color: var(--gray-hover); }
+
+/* DROPDOWNS Y POPUPS */
+.profile-dropdown, .notifications-dropdown {
+    position: fixed; background: #ffffff;
+    border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    border: 1px solid #efefef; display: none; flex-direction: column;
+    padding: 8px 0; width: 240px; z-index: 1001;
+}
+/* Posición Desktop */
+.profile-dropdown { bottom: 20px; left: 96px; }
+.notifications-dropdown { top: 120px; left: 96px; width: 300px; }
+
+.dropdown-header { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+.dropdown-header .user-name { font-weight: 600; font-size: 15px; color: var(--text-dark); }
+.dropdown-header .user-handle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+.dropdown-item {
+    padding: 12px 16px; text-decoration: none; color: var(--text-dark);
+    font-size: 14px; font-weight: 500; cursor: pointer; text-align: left;
+    transition: background-color 0.2s; border: none; background: transparent; width: 100%;
+    display: flex; align-items: center; gap: 10px;
+}
+.dropdown-item:hover { background-color: var(--gray-light); }
+.dropdown-item.logout-btn { color: var(--pinterest-red); border-top: 1px solid #f0f0f0; margin-top: 4px; }
+
+.notification-item {
+    padding: 12px 16px; border-bottom: 1px solid #f9f9f9; display: flex; gap: 10px;
+    font-size: 13px; text-align: left; line-height: 1.4;
+}
+.notification-item:last-child { border-bottom: none; }
+.notification-avatar {
+    width: 28px; height: 28px; border-radius: 50%; background-color: var(--pinterest-red);
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 11px; flex-shrink: 0;
+}
+
+/* MODALES */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5); display: none; align-items: center;
+    justify-content: center; z-index: 2000; backdrop-filter: blur(5px);
+}
+.modal-card {
+    background: #ffffff; border-radius: 32px; width: 90%; max-width: 800px;
+    display: flex; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative; animation: modalFadeIn 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+@keyframes modalFadeIn {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.modal-close-btn {
+    position: absolute; top: 16px; right: 16px; border: none;
+    background: var(--gray-light); width: 36px; height: 36px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 16px; transition: background-color 0.2s; z-index: 10;
+}
+.modal-close-btn:hover { background: var(--gray-hover); }
+.modal-left {
+    width: 45%; background: #f7f7f7; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 32px;
+    border-right: 1px solid #efefef;
+}
+.modal-right { width: 55%; padding: 40px; display: flex; flex-direction: column; overflow-y: auto; max-height: 90vh; }
+.modal-right h2 { font-size: 24px; font-weight: 600; margin-bottom: 24px; color: var(--text-dark); }
+
+.modal-form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+.modal-form-group label { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+.modal-form-group input, .modal-form-group textarea, .modal-form-group select {
+    width: 100%; border: 2px solid var(--gray-hover); border-radius: 16px;
+    padding: 12px 16px; font-size: 15px; outline: none; background-color: #ffffff;
+    transition: border-color 0.2s;
+}
+.modal-form-group input:focus, .modal-form-group textarea:focus, .modal-form-group select:focus { border-color: #0076d3; }
+.modal-form-group textarea { height: 100px; resize: none; }
+
+.upload-area {
+    border: 2px dashed #ccc; border-radius: 24px; width: 100%; height: 320px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; background: #ffffff; transition: border-color 0.2s, background-color 0.2s;
+    padding: 20px; text-align: center; position: relative; overflow: hidden;
+}
+.upload-area:hover { border-color: var(--pinterest-red); background-color: #fafafa; }
+.upload-area input[type="file"] { display: none; }
+.upload-icon { font-size: 44px; margin-bottom: 12px; color: var(--text-muted); }
+.upload-prompt { font-size: 14px; font-weight: 500; color: var(--text-dark); }
+.upload-specs { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+.upload-preview { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; display: none; position: absolute; top: 0; left: 0; }
+
+.btn-modal-submit {
+    width: 100%; height: 48px; background-color: var(--pinterest-red); color: #ffffff;
+    border: none; border-radius: 24px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 12px;
+    transition: background-color 0.2s;
+}
+.btn-modal-submit:hover { background-color: var(--pinterest-red-hover); }
+
+/* --- RESPONSIVIDAD: TABLETS Y CELULARES --- */
+@media (max-width: 900px) {
+    /* Mover navbar al fondo */
+    .pinterest-sidebar {
+        top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: 65px;
+        flex-direction: row; border-right: none; border-top: 1px solid #efefef;
+        padding: 0 16px; justify-content: space-around;
+    }
+    .sidebar-logo { display: none; }
+    
+    .sidebar-nav-items {
+        flex-direction: row; gap: 0; width: 100%; justify-content: space-around;
+        margin-top: 0; flex-grow: 1;
+    }
+    .sidebar-item { width: 44px; height: 44px; font-size: 20px; }
+    .sidebar-item .badge { top: 2px; right: 2px; width: 16px; height: 16px; font-size: 8px; }
+
+    .sidebar-profile-section {
+        flex-direction: row; width: auto; margin-bottom: 0;
+    }
+    .nav-profile-pic { width: 40px; height: 40px; font-size: 14px; }
+    
+    /* Botones auth en mobile se condensan en fila */
+    .auth-sidebar-buttons {
+        flex-direction: row; width: auto; gap: 4px; padding: 0;
+    }
+    .auth-sidebar-btn { padding: 8px 12px; font-size: 10px; }
+
+    /* Ajuste de Topbar */
+    .pinterest-topbar { left: 0; height: 70px; padding: 0 16px; }
+    
+    /* Contenido offsets */
+    .feed-container {
+        padding: 85px 12px 85px 12px; /* 70px topbar + padding y 65px bottombar + padding */
+    }
+
+    /* Posición de Popups en Móvil */
+    .profile-dropdown {
+        bottom: 75px; left: auto; right: 16px; top: auto;
+    }
+    .notifications-dropdown {
+        bottom: 75px; top: auto; left: 50%; transform: translateX(-50%);
+    }
+
+    /* Adaptar modal a móvil */
+    .modal-card { flex-direction: column; max-height: 90vh; border-radius: 24px; }
+    .modal-left { width: 100%; padding: 20px; border-right: none; border-bottom: 1px solid #efefef; }
+    .modal-left .upload-area { height: 180px; }
+    .modal-right { width: 100%; padding: 24px; }
+    .modal-right h2 { font-size: 20px; margin-bottom: 16px; }
+}
+
+@media (max-width: 480px) {
+    .pinterest-topbar { height: 60px; }
+    .feed-container { padding: 75px 8px 80px 8px; }
+    .auth-sidebar-btn.register { display: none; } /* Ocultar registrarse en móvil pequeño para ahorrar espacio */
+    .auth-sidebar-btn.login { font-size: 9px; padding: 8px; }
+}

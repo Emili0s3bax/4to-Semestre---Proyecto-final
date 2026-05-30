@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest - Inicio</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- Incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .no-pins-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 18px;
+            font-weight: 500;
+            width: 100%;
+        }
+        .custom-cat-input-group {
+            display: none;
+            margin-top: 10px;
+        }
+        /* Estilos de error para modal de edición en el index */
+        .error-message {
+            background-color: #ffeef0;
+            color: #e60023;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+            border: 1px solid #ffd2d6;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra Lateral (Desktop) / Barra Inferior (Móvil/Tablet) -->
+    <nav class="pinterest-sidebar">
+        <a href="index.html" class="sidebar-logo">P</a>
+        
+        <div class="sidebar-nav-items">
+            <a href="index.html" class="sidebar-item active" title="Inicio"><span class="nav-icon">🏠</span></a>
+            <button id="btn-open-create" class="sidebar-item" title="Subir Imagen" style="display: none;"><span class="nav-icon">➕</span></button>
+            <button id="btn-notifications" class="sidebar-item" title="Notificaciones">
+                <span class="nav-icon">🔔</span>
+                <span class="badge" id="notifications-badge">3</span>
+            </button>
+        </div>
+        
+        <div class="sidebar-profile-section" id="nav-auth-container">
+            <!-- Rellenado dinámicamente (Botones login/register o foto de perfil) -->
+            <div class="auth-sidebar-buttons">
+                <a href="login.html" class="auth-sidebar-btn login">Entrar</a>
+                <a href="register.html" class="auth-sidebar-btn register">Registro</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Topbar (Buscador) -->
+    <header class="pinterest-topbar">
+        <div class="nav-search-bar">
+            <input type="text" id="global-search-input" placeholder="Buscar ideas, inspiración...">
+        </div>
+    </header>
+
+    <!-- Barra de Categorías Horizontal -->
+    <div style="padding-left: 112px; margin-top: 85px;" class="categories-scroll-container">
+        <!-- Ajustamos el padding izquierdo en desktop -->
+        <div class="categories-scroll-wrapper" id="categories-container" style="padding: 10px 0;">
+            <button class="cat-pill active" data-category="Todos">Todos</button>
+            <!-- Las categorías se cargarán dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Contenido Principal (Feed) -->
+    <main class="feed-container" style="padding-top: 10px;">
+        <div class="pin-gallery" id="pins-feed">
+            <div style="text-align: center; width: 100%; padding: 40px; color: var(--text-muted);">
+                Cargando inspiración...
+            </div>
+        </div>
+    </main>
+
+    <!-- Menú Dropdown del Perfil -->
+    <div class="profile-dropdown" id="profile-dropdown-menu">
+        <div class="dropdown-header">
+            <div class="user-name" id="dropdown-user-name">Usuario</div>
+            <div class="user-handle" id="dropdown-user-handle">@usuario</div>
+        </div>
+        <a href="usuario.html" class="dropdown-item">👤 Ver mi perfil</a>
+        <a href="usuario.html?tab=saved" class="dropdown-item">📌 Ver guardados</a>
+        <button id="btn-dropdown-edit-profile" class="dropdown-item">⚙️ Editar perfil</button>
+        <button id="btn-logout" class="dropdown-item logout-btn">🚪 Cerrar Sesión</button>
+    </div>
+
+    <!-- Pop-up de Notificaciones -->
+    <div class="notifications-dropdown" id="notifications-dropdown-menu">
+        <div class="dropdown-header">
+            <h4 style="font-size: 15px; font-weight: 600; color: var(--text-dark);">Notificaciones</h4>
+        </div>
+        <div id="notifications-list" style="max-height: 280px; overflow-y: auto;">
+            <!-- Notificaciones de muestra cargadas por JS -->
+        </div>
+    </div>
+
+    <!-- Modal de Creación de Pines -->
+    <div class="modal-overlay" id="create-pin-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="btn-close-create">&times;</button>
+            
+            <!-- Izquierda: Carga de Imagen -->
+            <div class="modal-left">
+                <div class="upload-area" id="drop-upload-area">
+                    <span class="upload-icon">📤</span>
+                    <span class="upload-prompt">Arrastra y suelta o haz clic para subir</span>
+                    <span class="upload-specs">Recomendado: archivos .jpg, .png de alta calidad</span>
+                    <input type="file" id="pin-image-input" accept="image/*">
+                    <img id="pin-image-preview" class="upload-preview" alt="Vista previa">
+                </div>
+            </div>
+            
+            <!-- Derecha: Detalles del Formulario -->
+            <form class="modal-right" id="create-pin-form">
+                <h2>Crear un nuevo Pin</h2>
+                
+                <div class="modal-form-group">
+                    <label for="pin-title">Título</label>
+                    <input type="text" id="pin-title" placeholder="Añade un título descriptivo" required>
+                </div>
+                
+                <div class="modal-form-group">
+                    <label for="pin-description">Descripción (opcional)</label>
+                    <textarea id="pin-description" placeholder="Cuéntales a todos de qué trata tu Pin"></textarea>
+                </div>
+                
+                <div class="modal-form-group">
+                    <label for="pin-category-select">Categoría</label>
+                    <select id="pin-category-select" required>
+                        <option value="" disabled selected>Elige una categoría</option>
+                        <option value="NEW_CATEGORY" style="font-weight: bold; color: var(--pinterest-red);">+ Crear nueva categoría...</option>
+                    </select>
+                    
+                    <div class="custom-cat-input-group" id="custom-category-group">
+                        <input type="text" id="custom-category-name" placeholder="Escribe el nombre de la nueva categoría">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-modal-submit">Guardar Pin</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Edición de Perfil (Accesible directamente en el Index) -->
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal-card" style="max-width: 480px;">
+            <button class="modal-close-btn" id="btn-close-edit">&times;</button>
+            
+            <form class="modal-right" id="edit-profile-form" style="width: 100%; padding: 40px;">
+                <h2>Editar tu Perfil</h2>
+                
+                <div id="edit-error-alert" class="error-message"></div>
+
+                <div class="modal-form-group">
+                    <label for="edit-name">Nombre completo</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                
+                <div class="modal-form-group">
+                    <label for="edit-username">Nombre de usuario</label>
+                    <input type="text" id="edit-username" required>
+                </div>
+                
+                <div class="modal-form-group">
+                    <label for="edit-email">Correo electrónico</label>
+                    <input type="email" id="edit-email" required>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="edit-age">Edad</label>
+                    <input type="number" id="edit-age" min="1" required>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="edit-password">Nueva contraseña (deja vacío para mantener la actual)</label>
+                    <input type="password" id="edit-password" placeholder="Mínimo 4 caracteres">
+                </div>
+                
+                <button type="submit" class="btn-modal-submit">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts de la Aplicación -->
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

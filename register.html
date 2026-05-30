@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest - Registro</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <!-- Incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .error-message {
+            background-color: #ffeef0;
+            color: #e60023;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+            border: 1px solid #ffd2d6;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <a href="index.html" style="text-decoration: none;"><div class="auth-logo">P</div></a>
+            <h1>Crea tu cuenta</h1>
+            <p>Explora nuevas ideas y organiza tus proyectos</p>
+
+            <div id="error-alert" class="error-message"></div>
+
+            <form class="auth-form" id="register-form">
+                <input type="text" id="nombre" placeholder="Nombre completo" required>
+                <input type="text" id="username" placeholder="Nombre de usuario (ej: juan_perez)" required>
+                <input type="email" id="email" placeholder="Correo electrónico" required>
+                <input type="password" id="password" placeholder="Crea una contraseña" required>
+                <input type="number" id="edad" placeholder="Edad" min="1" required>
+                <button type="submit" class="btn-auth-submit">Continuar</button>
+            </form>
+            <div class="auth-switch">¿Ya eres miembro? <a href="login.html">Inicia sesión</a></div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Si ya está logueado, redirigir al index
+            if (localStorage.getItem("currentUser")) {
+                window.location.href = "index.html";
+            }
+
+            $("#register-form").on("submit", function(e) {
+                e.preventDefault();
+
+                const nombre = $("#nombre").val().trim();
+                const username = $("#username").val().trim();
+                const email = $("#email").val().trim();
+                const password = $("#password").val();
+                const edad = parseInt($("#edad").val());
+                const $errorAlert = $("#error-alert");
+
+                $errorAlert.hide().text("");
+
+                // Validaciones adicionales en JS
+                if (!nombre || !username || !email || !password || isNaN(edad)) {
+                    $errorAlert.text("Por favor, completa todos los campos.").fadeIn();
+                    return;
+                }
+
+                if (password.length < 4) {
+                    $errorAlert.text("La contraseña debe tener al menos 4 caracteres.").fadeIn();
+                    return;
+                }
+
+                const $submitBtn = $(this).find("button[type='submit']");
+                $submitBtn.prop("disabled", true).text("Creando cuenta...");
+
+                $.ajax({
+                    url: "http://127.0.0.1:8000/api/auth/register",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        nombre: nombre,
+                        username: username,
+                        email: email,
+                        password: password,
+                        edad: edad
+                    }),
+                    success: function(response) {
+                        // El backend retorna el objeto Usuario recién creado.
+                        // Iniciamos sesión automáticamente guardándolo en localStorage
+                        localStorage.setItem("currentUser", JSON.stringify(response));
+                        window.location.href = "index.html";
+                    },
+                    error: function(xhr) {
+                        $submitBtn.prop("disabled", false).text("Continuar");
+                        let errorMsg = "Ocurrió un error en el registro.";
+                        if (xhr.responseJSON && xhr.responseJSON.detail) {
+                            errorMsg = xhr.responseJSON.detail;
+                        }
+                        $errorAlert.text(errorMsg).fadeIn();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

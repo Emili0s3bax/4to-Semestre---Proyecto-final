@@ -1,0 +1,110 @@
+@import url("index.css");
+
+.profile-header {
+    margin-top: 95px; /* Offset for search topbar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--gray-light);
+    color: var(--text-dark);
+    font-size: 48px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.profile-name {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.profile-username {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.profile-stats {
+    font-size: 15px;
+    color: var(--text-dark);
+}
+
+.btn-edit-profile {
+    background-color: var(--gray-light);
+    color: var(--text-dark);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-edit-profile:hover {
+    background-color: var(--gray-hover);
+}
+
+.btn-edit-profile:active {
+    transform: scale(0.97);
+}
+
+/* PESTAÑAS DEL PERFIL (CREADOS / GUARDADOS) */
+.profile-tabs {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    border-bottom: 1px solid #efefef;
+    width: 100%;
+    max-width: 320px;
+    margin: 24px auto 32px auto;
+    padding-bottom: 8px;
+}
+
+.profile-tab-btn {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 16px;
+    color: var(--text-muted);
+    position: relative;
+    transition: color 0.2s;
+}
+
+.profile-tab-btn:hover {
+    color: var(--text-dark);
+}
+
+.profile-tab-btn.active {
+    color: var(--text-dark);
+}
+
+.profile-tab-btn.active::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 10%;
+    right: 10%;
+    height: 4px;
+    background-color: var(--text-dark);
+    border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+    .profile-header { margin-top: 85px; }
+}
