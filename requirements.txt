@@ -1,3 +1,6 @@
-fastapi
+fastapi[standard]
+sqlmodel
+python-multipart
+boto3
 uvicorn
 pydantic
