@@ -1,4 +1,0 @@
-fastapi[standard]
-sqlmodel
-python-multipart
-boto3
