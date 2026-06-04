@@ -1,109 +1,166 @@
-.pin-gallery {
-    column-count: 5;
-    column-gap: 16px;
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
+/* Reset básico */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
 }
 
-@media (max-width: 1200px) { .pin-gallery { column-count: 4; } }
-@media (max-width: 900px) { .pin-gallery { column-count: 3; } }
-@media (max-width: 600px) { .pin-gallery { column-count: 2; } }
-
-.pin-card {
-    display: block;
-    break-inside: avoid;
-    margin-bottom: 16px;
-    position: relative;
-    cursor: pointer;
-    border-radius: 16px;
-    overflow: hidden;
-    background-color: var(--gray-light);
-    text-decoration: none;
-    height: auto;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+body { 
+    display: flex; 
+    min-height: 100vh; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    background-color: #ffffff;
 }
 
-.pin-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+/* --- SIDEBAR FIJA --- */
+.sidebar { 
+    width: 80px; 
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 16px 0; 
+    background-color: white;
+    z-index: 1000;
 }
 
-/* Permitir que la imagen tome su tamaño vertical original */
-.pin-card img {
-    width: 100%;
-    height: auto;
-    max-height: 650px; /* Evita imágenes infinitamente largas */
-    object-fit: cover;
-    display: block;
-    transition: transform 0.5s ease;
+.logo-container { margin-bottom: 24px; }
+.logo-img { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; transition: transform 0.2s; }
+.logo-img:hover { transform: scale(1.1); }
+
+.nav-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; 
+    flex-grow: 1;
 }
 
-.pin-card:hover img {
-    transform: scale(1.02);
+.settings-container {
+    margin-top: auto; 
+    padding-bottom: 20px;
 }
 
-.pin-card .placeholder-img {
-    width: 100%;
-    min-height: 180px;
+.icon {
+    width: 48px;
+    height: 48px;
+    padding: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
-    color: var(--text-muted);
-    font-size: 14px;
-    background: linear-gradient(135deg, #f5f5f5 0%, #e1e1e1 100%);
-    padding: 20px;
-    text-align: center;
-}
-
-.pin-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 2;
-}
-
-.pin-card:hover .pin-overlay {
-    opacity: 1;
-}
-
-.btn-save {
-    background-color: var(--pinterest-red);
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    font-weight: 600;
     cursor: pointer;
-    align-self: flex-end;
-    box-shadow: 0 4px 10px rgba(230, 0, 35, 0.2);
-    transition: background-color 0.2s, transform 0.1s;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.2s;
 }
 
-.btn-save:hover {
-    background-color: var(--pinterest-red-hover);
-}
-.btn-save:active {
-    transform: scale(0.95);
+.icon:hover { background-color: #efefef; transform: scale(1.05); }
+
+/* --- CONTENIDO PRINCIPAL --- */
+.main-wrapper { 
+    flex: 1; 
+    margin-left: 80px; 
+    display: flex; 
+    flex-direction: column; 
 }
 
-.pin-footer-info {
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+/* --- HEADER --- */
+header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    height: 80px;
+    gap: 15px;
 }
+
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    background-color: #efefef;
+    border-radius: 25px;
+    padding: 0 15px;
+    height: 48px;
+    transition: background-color 0.2s;
+}
+
+.search-container:hover { background-color: #e0e0e0; }
+
+.search-icon { width: 20px; height: 20px; opacity: 0.6; }
+.camera-icon { width: 24px; height: 24px; cursor: pointer; opacity: 0.6; }
+
+input {
+    flex-grow: 1;
+    background-color: transparent;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    outline: none;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.profile-icon:hover { transform: scale(1.1); }
+
+/* --- CUADRÍCULA MASONRY CON EFECTO HOVER --- */
+.masonry-grid { 
+    column-count: 5; 
+    column-gap: 15px; 
+    padding: 20px; 
+}
+
+.post-card { 
+    display: inline-block;
+    width: 100%;
+    break-inside: avoid; 
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Efecto de suavidad */
+}
+
+/* Efecto al pasar el ratón sobre las imágenes */
+.post-card:hover {
+    transform: scale(1.02); /* Aumenta ligeramente el tamaño */
+    filter: brightness(90%); /* Oscurece un poco la imagen */
+}
+
+.post-card img { 
+    width: 100%; 
+    display: block; 
+    border-radius: 16px; 
+}
+
+
+.detail-page {
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px; left: 20px;
+    background: white;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    border: none; cursor: pointer;
+}
+
+
+/* Responsividad */
+@media (max-width: 1200px) { .masonry-grid { column-count: 4; } }
+@media (max-width: 900px) { .masonry-grid { column-count: 3; } }
+@media (max-width: 600px) { .masonry-grid { column-count: 2; } }
