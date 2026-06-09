@@ -1,43 +1,349 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>Detalle de Pin | Pinterest-UIDE</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Pin</title>
+
+    <!-- CSS externo -->
     <link rel="stylesheet" href="/css/detalle.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
+
+    <!-- Botón para regresar -->
+    <button class="back-button" onclick="window.location.href='index.html'">← Volver</button>
+
     <div class="pin-detail-container">
+
         <div class="pin-detail-card">
+
+            <!-- Imagen principal -->
             <div class="pin-detail-image">
-                <img id="main-image" src="" alt="Detalle del Pin">
+                <img id="main-image" src="" alt="Pin">
             </div>
+
+            <!-- Información -->
             <div class="pin-detail-info">
+
                 <div class="pin-detail-actions">
-                    <button class="btn-delete-pin">Eliminar</button>
+                    <button class="btn-icon">↗</button>
+                    <button class="btn-icon">⋯</button>
                     <button class="btn-save">Guardar</button>
                 </div>
-                <h2 id="pin-title">Título del Pin</h2>
-                <div class="comments-section" id="comments-container">
+
+                <div class="pin-author" id="author-info">
+                    <img id="author-avatar" src="https://i.pravatar.cc/100?img=12">
+                    <div class="author-data">
+                        <strong id="author-name"></strong>
+                        <span id="author-followers"></span>
                     </div>
-                <div class="comment-box-input">
-                    <input type="text" placeholder="Añade un comentario">
                 </div>
+
+                <h2 id="pin-title"></h2>
+                <p id="pin-description" class="pin-description"></p>
+
+                <div class="mini-gallery" id="mini-gallery">
+                    <!-- Las imágenes relacionadas se cargarán aquí -->
+                </div>
+
+                <div class="comments-header">
+                    <h3 id="comments-count">0 comentarios</h3>
+                </div>
+
+                <div class="comments-section" id="comments-section">
+                    <!-- Los comentarios se cargarán aquí -->
+                </div>
+
+                <div class="comment-box-input">
+                    <input type="text" id="comment-input" placeholder="Añade un comentario">
+                    <button id="submit-comment" class="btn-submit">Publicar</button>
+                </div>
+
             </div>
+
+            <!-- Recomendados -->
+            <div class="related-pins" id="related-pins">
+                <!-- Los pins relacionados se cargarán aquí -->
+            </div>
+
         </div>
+
     </div>
 
     <script>
-        $(document).ready(function() {
-            // Obtener la URL de la imagen de los parámetros
-            const urlParams = new URLSearchParams(window.location.search);
-            const imageUrl = urlParams.get('image');
+        $(document).ready(function () {
 
-            if (imageUrl) {
-                $('#main-image').attr('src', imageUrl);
+            // Obtener la URL de la imagen de los parámetros
+            const params = new URLSearchParams(window.location.search);
+            const imageUrl = params.get('image');
+            let currentPost = null;
+            let allPosts = [];
+
+            // Función para obtener todos los posts del backend
+            async function fetchAllPosts() {
+                try {
+                    const response = await fetch('http://localhost:8000/posts');
+                    allPosts = await response.json();
+                    return allPosts;
+                } catch (error) {
+                    console.error('Error cargando posts:', error);
+                    return [];
+                }
             }
+
+            // Función para obtener el post actual por URL
+            function getCurrentPost() {
+                if (!imageUrl) return null;
+                return allPosts.find(post => post.url === imageUrl);
+            }
+
+            // Función para obtener posts de la misma categoría
+            function getRelatedPosts(currentPost, limit = 4) {
+                if (!currentPost) return [];
+
+                // Filtrar posts de la misma categoría, excluyendo el actual
+                const sameCategory = allPosts.filter(post =>
+                    post.categoria === currentPost.categoria && post.url !== currentPost.url
+                );
+
+                // Si no hay suficientes de la misma categoría, completar con otros posts
+                if (sameCategory.length < limit) {
+                    const otherPosts = allPosts.filter(post =>
+                        post.categoria !== currentPost.categoria && post.url !== currentPost.url
+                    );
+                    return [...sameCategory, ...otherPosts].slice(0, limit);
+                }
+
+                return sameCategory.slice(0, limit);
+            }
+
+            // Función para cargar comentarios desde localStorage
+            function loadComments(postId) {
+                const commentsKey = `comments_${postId}`;
+                const savedComments = localStorage.getItem(commentsKey);
+                return savedComments ? JSON.parse(savedComments) : [];
+            }
+
+            // Función para guardar comentarios en localStorage
+            function saveComments(postId, comments) {
+                const commentsKey = `comments_${postId}`;
+                localStorage.setItem(commentsKey, JSON.stringify(comments));
+            }
+
+            // Función para renderizar comentarios
+            function renderComments(comments) {
+                const commentsSection = $('#comments-section');
+                const commentsCount = $('#comments-count');
+
+                if (comments.length === 0) {
+                    commentsSection.html('<div class="no-comments">No hay comentarios aún. ¡Sé el primero en comentar!</div>');
+                    commentsCount.text('0 comentarios');
+                    return;
+                }
+
+                commentsCount.text(`${comments.length} ${comments.length === 1 ? 'comentario' : 'comentarios'}`);
+
+                commentsSection.empty();
+                comments.forEach(comment => {
+                    const commentDiv = $('<div>').addClass('comment');
+                    const avatar = $('<div>').addClass('comment-avatar').text(comment.nombre.charAt(0).toUpperCase());
+                    const commentContent = $('<div>').addClass('comment-content');
+                    const strong = $('<strong>').text(comment.nombre);
+                    const text = $('<span>').text(` ${comment.texto}`);
+                    const date = $('<div>').addClass('comment-date').text(new Date(comment.fecha).toLocaleDateString());
+
+                    commentContent.append(strong);
+                    commentContent.append(text);
+                    commentContent.append(date);
+                    commentDiv.append(avatar);
+                    commentDiv.append(commentContent);
+                    commentsSection.append(commentDiv);
+                });
+            }
+
+            // Función para agregar un comentario
+            function addComment(commentText, nombre) {
+                if (!commentText.trim()) return false;
+
+                const postId = currentPost.id || currentPost.url;
+                const comments = loadComments(postId);
+
+                const newComment = {
+                    id: Date.now(),
+                    nombre: nombre,
+                    texto: commentText.trim(),
+                    fecha: new Date().toISOString()
+                };
+
+                comments.push(newComment);
+                saveComments(postId, comments);
+                renderComments(comments);
+                return true;
+            }
+
+            // Función para renderizar mini galería (imágenes relacionadas)
+            function renderMiniGallery(relatedPosts) {
+                const miniGallery = $('#mini-gallery');
+                miniGallery.empty();
+
+                if (relatedPosts.length === 0) {
+                    miniGallery.html('<p class="no-related">No hay imágenes relacionadas</p>');
+                    return;
+                }
+
+                relatedPosts.slice(0, 3).forEach(post => {
+                    const img = $('<img>')
+                        .attr('src', post.url)
+                        .attr('alt', post.titulo)
+                        .attr('title', post.titulo)
+                        .on('click', function () {
+                            window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
+                        });
+                    miniGallery.append(img);
+                });
+            }
+
+            // Función para renderizar pins relacionados
+            function renderRelatedPins(relatedPosts) {
+                const relatedPinsSection = $('#related-pins');
+                relatedPinsSection.empty();
+
+                if (relatedPosts.length === 0) {
+                    relatedPinsSection.html('<p class="no-related">No hay pins relacionados</p>');
+                    return;
+                }
+
+                relatedPosts.forEach(post => {
+                    const relatedCard = $('<div>').addClass('related-card');
+                    const img = $('<img>')
+                        .attr('src', post.url)
+                        .attr('alt', post.titulo)
+                        .on('click', function () {
+                            window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
+                        });
+                    const p = $('<p>').text(post.titulo);
+
+                    relatedCard.append(img);
+                    relatedCard.append(p);
+                    relatedPinsSection.append(relatedCard);
+                });
+            }
+
+            // Función para formatear número de seguidores
+            function formatFollowers(count) {
+                if (!count) return "0 seguidores";
+                if (count >= 1000) {
+                    return (count / 1000).toFixed(1) + 'k seguidores';
+                }
+                return count + ' seguidores';
+            }
+
+            // Función principal para cargar la página
+            async function loadPage() {
+                await fetchAllPosts();
+
+                currentPost = getCurrentPost();
+
+                if (currentPost) {
+                    // Cargar imagen principal y título
+                    $("#main-image").attr("src", currentPost.url);
+                    $("#pin-title").text(currentPost.titulo);
+
+                    // Cargar descripción si existe
+                    if (currentPost.descripcion) {
+                        $("#pin-description").text(currentPost.descripcion).show();
+                    } else {
+                        $("#pin-description").hide();
+                    }
+
+                    // Cargar información del autor desde el post
+                    const autorNombre = currentPost.autor_nombre || "Usuario Anónimo";
+                    $("#author-name").text(autorNombre);
+
+                    // Generar número aleatorio de seguidores para demostración
+                    const followersCount = Math.floor(Math.random() * 10000);
+                    $("#author-followers").text(formatFollowers(followersCount));
+
+                    // Cambiar avatar según el autor
+                    const avatarNum = autorNombre.length % 70;
+                    $("#author-avatar").attr("src", `https://i.pravatar.cc/100?img=${avatarNum}`);
+
+                    // Obtener posts de la misma categoría
+                    const relatedPosts = getRelatedPosts(currentPost);
+
+                    // Renderizar mini galería y pins relacionados
+                    renderMiniGallery(relatedPosts);
+                    renderRelatedPins(relatedPosts);
+
+                    // Cargar comentarios guardados
+                    const postId = currentPost.id;
+                    const savedComments = loadComments(postId);
+                    renderComments(savedComments);
+
+                } else if (imageUrl) {
+                    // Si no se encuentra el post pero tenemos la URL
+                    $("#main-image").attr("src", imageUrl);
+                    $("#pin-title").text("Sin título");
+                    $("#pin-description").hide();
+                    $("#author-name").text("Usuario Anónimo");
+                    $("#author-followers").text("0 seguidores");
+
+                    // Mostrar todos los posts como relacionados
+                    const relatedPosts = allPosts.filter(post => post.url !== imageUrl).slice(0, 4);
+                    renderRelatedPins(relatedPosts);
+                    renderMiniGallery(relatedPosts.slice(0, 3));
+
+                    // Cargar comentarios por URL
+                    const comments = loadComments(imageUrl);
+                    renderComments(comments);
+                    currentPost = { id: imageUrl, url: imageUrl, autor_nombre: "Usuario Anónimo" };
+
+                } else {
+                    // Imagen por defecto
+                    $("#main-image").attr("src", "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=900");
+                    $("#pin-title").text("Bienvenido a Pinterest");
+                    $("#pin-description").text("Explora ideas increíbles y encuentra inspiración").show();
+                    $("#author-name").text("Pinterest Team");
+                    $("#author-followers").text("1M seguidores");
+
+                    const defaultRelated = allPosts.slice(0, 4);
+                    renderRelatedPins(defaultRelated);
+                    renderMiniGallery(defaultRelated.slice(0, 3));
+
+                    currentPost = { id: 'default', url: 'default', autor_nombre: "Pinterest Team" };
+                }
+            }
+
+            // Evento para agregar comentarios
+            $('#submit-comment').on('click', function () {
+                const commentText = $('#comment-input').val();
+                const nombre = currentPost?.autor_nombre || "Usuario Anónimo";
+
+                if (commentText.trim()) {
+                    const success = addComment(commentText, nombre);
+                    if (success) {
+                        $('#comment-input').val('');
+                    }
+                }
+            });
+
+            // Permitir enviar comentario con Enter
+            $('#comment-input').on('keypress', function (e) {
+                if (e.which === 13) {
+                    $('#submit-comment').click();
+                }
+            });
+
+            // Cargar la página
+            loadPage();
+
         });
     </script>
+
 </body>
+
 </html>

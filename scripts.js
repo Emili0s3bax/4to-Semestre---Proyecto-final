@@ -11,23 +11,27 @@ $(document).ready(function() {
             container.empty();
             
             posts.forEach(post => {
-                // Creamos el elemento usando jQuery
-                const card = $('<div>').addClass('post-card');
-                
-                // Agregamos la imagen con la clase .pin-img para que el selector funcione
-                card.html(`
-                    <img src="${post.url}" alt="${post.titulo}" class="pin-img">
-                    <p>${post.titulo}</p>
-                `);
+    const card = $('<div>').addClass('post-card');
+    
+    // Crear elemento img con manejo de error
+    const img = $('<img>')
+        .attr('src', post.url)
+        .attr('alt', post.titulo)
+        .addClass('pin-img')
+        .on('error', function() {
+            $(this).attr('src', 'ruta/a/imagen_por_defecto.png'); // Imagen si falla la carga
+            console.error('No se pudo cargar la imagen:', post.url);
+        });
 
-                // Evento de clic usando jQuery
-                card.on('click', function() {
-                    const imgSrc = post.url;
-                    window.location.href = `detalle.html?image=${encodeURIComponent(imgSrc)}`;
-                });
+    card.append(img);
+    card.append(`<p>${post.titulo}</p>`);
 
-                container.append(card);
-            });
+    card.on('click', function() {
+        window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
+    });
+
+    container.append(card);
+});
         } catch (error) {
             console.error('Error cargando posts:', error);
         }

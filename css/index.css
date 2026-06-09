@@ -127,6 +127,10 @@ input {
     margin-bottom: 15px;
     cursor: pointer;
     transition: transform 0.3s ease;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Agregado para mejor visibilidad */
+    overflow: hidden;
 }
 
 .post-card:hover {
@@ -137,7 +141,19 @@ input {
 .post-card img { 
     width: 100%; 
     display: block; 
-    border-radius: 16px; 
+    border-radius: 16px 16px 0 0; 
+}
+
+/* Estilo para el texto del título en la tarjeta */
+.post-card p {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #333333;
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .detail-page {
@@ -155,6 +171,12 @@ input {
     border-radius: 50%;
     width: 40px; height: 40px;
     border: none; cursor: pointer;
+}
+
+.pin-img {
+    display: block !important;
+    visibility: visible !important;
+    max-width: 100%;
 }
 
 /* Responsividad */
