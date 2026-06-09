@@ -4,11 +4,11 @@ from botocore.exceptions import NoCredentialsError, ClientError
 
 # ==============================================================================
 # Configuración del Entorno AWS para el Usuario: zahid_cloud_developer
-# Bucket de destino: uide-pinterest-hub-prod-s3
+# Bucket de destino: uide-publify-hub-prod-s3
 # Prefijo lógico: pins-multimedia/
 # ==============================================================================
 
-BUCKET_NAME = "uide-pinterest-hub-prod-s3"
+BUCKET_NAME = "uide-publify-hub-prod-s3"
 S3_PREFIX = "pins-multimedia/"
 
 def get_s3_client():
@@ -18,8 +18,7 @@ def get_s3_client():
     """
     access_key = os.getenv("AWS_ACCESS_KEY_ID")
     secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-    session_token = os.getenv("AWS_SESSION_TOKEN") # Para AWS Academy / credenciales temporales
-    region = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
+    region = os.getenv("AWS_DEFAULT_REGION", "us-east-2")
     
     return boto3.client(
         "s3",
@@ -47,6 +46,9 @@ def upload_file_to_s3(file_bytes: bytes, filename: str, content_type: str) -> st
         ACL="public-read"  # Permite acceso público de lectura para el consumo en el frontend
     )
     
-    # Construir la URL pública de AWS S3
-    url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{s3_key}"
+    # Obtener región activa para construir el endpoint regional correcto
+    region = os.getenv("AWS_DEFAULT_REGION", "us-east-2")
+    
+    # Construir la URL pública de AWS S3 con endpoint regional (evita redirecciones 307)
+    url = f"https://{BUCKET_NAME}.s3.{region}.amazonaws.com/{s3_key}"
     return url

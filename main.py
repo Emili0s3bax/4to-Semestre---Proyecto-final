@@ -4,6 +4,19 @@ from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 import os
 
+# Cargar variables de entorno locales desde el archivo .env si existe (Evita hardcoding de credenciales)
+if os.path.exists(".env"):
+    print("Cargando variables de entorno desde el archivo .env...")
+    with open(".env", "r") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                try:
+                    key, val = line.split("=", 1)
+                    os.environ[key.strip()] = val.strip().strip('"').strip("'")
+                except ValueError:
+                    pass
+
 from db import create_all_table, engine
 from models import Categoria, Post, Usuario
 from app.routers import auth, posts, notifications
