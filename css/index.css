@@ -126,13 +126,12 @@ input {
     break-inside: avoid; 
     margin-bottom: 15px;
     cursor: pointer;
-    transition: transform 0.3s ease; /* Efecto de suavidad */
+    transition: transform 0.3s ease;
 }
 
-/* Efecto al pasar el ratón sobre las imágenes */
 .post-card:hover {
-    transform: scale(1.02); /* Aumenta ligeramente el tamaño */
-    filter: brightness(90%); /* Oscurece un poco la imagen */
+    transform: scale(1.02); 
+    filter: brightness(90%); 
 }
 
 .post-card img { 
@@ -140,7 +139,6 @@ input {
     display: block; 
     border-radius: 16px; 
 }
-
 
 .detail-page {
     background-color: rgba(0, 0, 0, 0.7);
@@ -158,7 +156,6 @@ input {
     width: 40px; height: 40px;
     border: none; cursor: pointer;
 }
-
 
 /* Responsividad */
 @media (max-width: 1200px) { .masonry-grid { column-count: 4; } }
