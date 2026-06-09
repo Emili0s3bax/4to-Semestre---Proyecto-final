@@ -3,28 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalle de Pin | Pinterest-UIDE</title>
-    <link rel="stylesheet" href="index.css"> </head>
-<body class="detail-page">
-    <div class="modal-content">
-        <button class="back-btn" onclick="history.back()">←</button>
-        <div class="modal-body">
-            <img id="main-image" src="" alt="Detalle">
-            <div class="modal-info">
-                <h2>Título del Pin</h2>
-                <p>34 comentarios</p>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/detalle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="pin-detail-container">
+        <div class="pin-detail-card">
+            <div class="pin-detail-image">
+                <img id="main-image" src="" alt="Detalle del Pin">
+            </div>
+            <div class="pin-detail-info">
+                <div class="pin-detail-actions">
+                    <button class="btn-delete-pin">Eliminar</button>
+                    <button class="btn-save">Guardar</button>
                 </div>
+                <h2 id="pin-title">Título del Pin</h2>
+                <div class="comments-section" id="comments-container">
+                    </div>
+                <div class="comment-box-input">
+                    <input type="text" placeholder="Añade un comentario">
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            // Obtener la URL de la imagen de los parámetros
+            const urlParams = new URLSearchParams(window.location.search);
+            const imageUrl = urlParams.get('image');
+
+            if (imageUrl) {
+                $('#main-image').attr('src', imageUrl);
+            }
+        });
+    </script>
 </body>
-
-<script>
-    // Obtener la URL de la imagen desde los parámetros de la página
-    const urlParams = new URLSearchParams(window.location.search);
-    const imageUrl = urlParams.get('image');
-
-    // Asignar la imagen al elemento en la página de detalle
-    if (imageUrl) {
-        document.getElementById('main-image').src = imageUrl;
-    }
-</script>
 </html>
