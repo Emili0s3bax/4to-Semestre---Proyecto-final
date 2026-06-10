@@ -7,9 +7,289 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/index.css">
+    <style>
+        /* Estilos adicionales de autenticación */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-btn {
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .login-btn-header {
+            background: transparent;
+            color: #111;
+        }
+
+        .login-btn-header:hover {
+            background: #efefef;
+        }
+
+        .register-btn-header {
+            background: #e60023;
+            color: white;
+        }
+
+        .register-btn-header:hover {
+            background: #ad081b;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 40px;
+            transition: background 0.2s;
+        }
+
+        .profile-icon:hover {
+            background: #efefef;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            padding: 12px 16px;
+        }
+
+        .dropdown-header strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .dropdown-header span {
+            font-size: 12px;
+            color: #767676;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e2e2e2;
+            margin: 4px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: #111;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+
+        .logout-btn {
+            color: #e60023;
+        }
+
+        .logout-btn i {
+            color: #e60023;
+        }
+
+        /* Overlay y estilos de tarjetas */
+        .post-image-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .post-overlay {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            left: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .post-card:hover .post-overlay {
+            opacity: 1;
+        }
+
+        .save-pin-btn, .like-pin-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .save-pin-btn {
+            background: #e60023;
+            color: white;
+        }
+
+        .save-pin-btn.saved {
+            background: #111;
+        }
+
+        .like-pin-btn.liked {
+            background: #e60023;
+            color: white;
+        }
+
+        .post-info {
+            padding: 12px 14px;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .post-author img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .post-author span {
+            font-size: 12px;
+            color: #767676;
+        }
+
+        .post-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e2e2;
+            border-top-color: #e60023;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .categories-bar {
+            display: flex;
+            gap: 12px;
+            padding: 16px 24px;
+            overflow-x: auto;
+            border-bottom: 1px solid #e2e2e2;
+            background: white;
+            position: sticky;
+            top: 73px;
+            z-index: 98;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: none;
+            background: #efefef;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .category-btn.active {
+            background: #111;
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #efefef;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: fixed;
+                left: -240px;
+                transition: left 0.3s;
+                z-index: 1000;
+                background: white;
+                height: 100vh;
+            }
+            .sidebar.mobile-open {
+                left: 0;
+            }
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
 
+    <!-- BARRA LATERAL -->
     <nav class="sidebar">
         <div class="logo-container">
             <i class="fab fa-pinterest"></i>
@@ -37,8 +317,10 @@
                 <input type="text" id="main-search" placeholder="Buscar">
                 <i class="fas fa-camera"></i>
             </div>
-            <div class="profile-icon">
-                <img src="https://i.pravatar.cc/100?img=12" alt="Perfil">
+            
+            <!-- SECCIÓN DE USUARIO -->
+            <div class="header-actions" id="headerActions">
+                <!-- Se carga dinámicamente -->
             </div>
         </header>
 
@@ -50,7 +332,6 @@
             <button class="category-btn" data-categoria="Paisajes">Paisajes</button>
             <button class="category-btn" data-categoria="Animales">Animales</button>
             <button class="category-btn" data-categoria="Viajes">Viajes</button>
-            <button class="category-btn" data-categoria="Anime">anime</button>
         </div>
 
         <main id="pinterest-container" class="masonry-grid"></main>
@@ -70,13 +351,83 @@
             let currentPage = 0;
             const POSTS_PER_PAGE = 12;
 
+            // ========== GESTIÓN DE USUARIO ==========
+            function updateUserUI() {
+                const token = localStorage.getItem('token');
+                const user = JSON.parse(localStorage.getItem('user') || 'null');
+                const headerActions = $('#headerActions');
+                
+                if (token && user) {
+                    headerActions.html(`
+                        <div class="user-menu">
+                            <div class="profile-icon" id="userMenuBtn">
+                                <div class="user-avatar" style="background-color: ${user.avatar_color || '#e60023'}">
+                                    ${user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="user-dropdown" id="userDropdown">
+                                <div class="dropdown-header">
+                                    <strong>${user.nombre || user.username}</strong>
+                                    <span>@${user.username}</span>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a href="profile.html" class="dropdown-item">
+                                    <i class="fas fa-user"></i> Mi perfil
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <button id="logoutBtn" class="dropdown-item logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                </button>
+                            </div>
+                        </div>
+                    `);
+                    
+                    $('#userMenuBtn').on('click', function(e) {
+                        e.stopPropagation();
+                        $('#userDropdown').toggle();
+                    });
+                    
+                    $(document).on('click', function() {
+                        $('#userDropdown').hide();
+                    });
+                    
+                    $('#logoutBtn').on('click', function() {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        updateUserUI();
+                        location.reload();
+                    });
+                } else {
+                    headerActions.html(`
+                        <a href="login.html" class="auth-btn login-btn-header">Iniciar sesión</a>
+                        <a href="register.html" class="auth-btn register-btn-header">Registrarse</a>
+                    `);
+                }
+            }
+
+            function verifyToken() {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    $.ajax({
+                        url: 'http://localhost:8000/api/auth/verify',
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        error: function() {
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            updateUserUI();
+                        }
+                    });
+                }
+            }
+
             // ========== OBTENER POSTS DE LA API ==========
             async function fetchPosts() {
                 try {
                     const response = await fetch('http://localhost:8000/posts');
                     allPosts = await response.json();
                     
-                    // Agregar datos adicionales si faltan
                     allPosts = allPosts.map(post => ({
                         ...post,
                         autor_nombre: post.autor_nombre || "Usuario Anónimo",
@@ -87,7 +438,6 @@
                     filterAndDisplayPosts();
                 } catch (error) {
                     console.error('Error:', error);
-                    // Datos de respaldo
                     allPosts = [
                         { id: 1, url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600", titulo: "Inspiración Creativa", categoria: "Arte", autor_nombre: "Artista", likes: 234 },
                         { id: 2, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600", titulo: "Montañas Mágicas", categoria: "Paisajes", autor_nombre: "Viajero", likes: 567 },
@@ -103,12 +453,10 @@
             function filterAndDisplayPosts() {
                 let filtered = [...allPosts];
                 
-                // Filtrar por categoría
                 if (currentCategory !== 'todos') {
                     filtered = filtered.filter(post => post.categoria === currentCategory);
                 }
                 
-                // Filtrar por búsqueda
                 const searchTerm = $('#main-search').val().toLowerCase();
                 if (searchTerm) {
                     filtered = filtered.filter(post => 
@@ -123,7 +471,7 @@
                 loadMorePosts();
             }
 
-            // ========== CARGAR MÁS POSTS (INFINITE SCROLL) ==========
+            // ========== CARGAR MÁS POSTS ==========
             function loadMorePosts() {
                 if (isLoading) return;
                 isLoading = true;
@@ -142,14 +490,12 @@
                 }, 200);
             }
 
-            // ========== RENDERIZAR TARJETA (CON REDIRECCIÓN FUNCIONAL) ==========
+            // ========== RENDERIZAR TARJETA ==========
             function renderPostCard(post) {
                 const card = $('<div>').addClass('post-card');
                 
-                // Verificar si está guardado
                 const isSaved = localStorage.getItem(`saved_${post.id}`) === 'true';
                 
-                // Verificar likes
                 let likesCount = post.likes;
                 let isLiked = false;
                 const savedLikes = localStorage.getItem(`likes_${post.id}`);
@@ -184,19 +530,18 @@
                 
                 card.html(cardHtml);
                 
-                // ========== REDIRECCIÓN A DETALLE (FUNCIONAL) ==========
+                // Redirección a detalle
                 card.find('.pin-img-click').on('click', function(e) {
                     e.stopPropagation();
                     window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
                 });
                 
-                // También redirige al hacer clic en el título o autor
                 card.find('.post-title, .post-author').on('click', function(e) {
                     e.stopPropagation();
                     window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
                 });
                 
-                // Botón guardar
+                // Guardar pin
                 card.find('.save-pin-btn').on('click', function(e) {
                     e.stopPropagation();
                     const btn = $(this);
@@ -214,7 +559,7 @@
                     }
                 });
                 
-                // Botón like
+                // Like
                 card.find('.like-pin-btn').on('click', function(e) {
                     e.stopPropagation();
                     const btn = $(this);
@@ -251,6 +596,14 @@
                 $('#pinterest-container').append(card);
             }
 
+            // ========== UTILIDADES ==========
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
             // ========== EVENTOS ==========
             $('#main-search').on('input', function() {
                 filterAndDisplayPosts();
@@ -275,15 +628,9 @@
                 $('.sidebar').toggleClass('mobile-open');
             });
 
-            // ========== UTILIDADES ==========
-            function escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            // Iniciar
+            // ========== INICIALIZAR ==========
+            updateUserUI();
+            verifyToken();
             fetchPosts();
         });
     </script>

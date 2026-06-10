@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Publify</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .profile-header {
+            background: white;
+            border-bottom: 1px solid #e2e2e2;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #efefef;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e2e2e2;
+        }
+
+        .profile-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .cover-banner {
+            height: 120px;
+            background: linear-gradient(135deg, #e60023 0%, #ff6b6b 100%);
+        }
+
+        .avatar-section {
+            position: relative;
+            text-align: center;
+            margin-top: -50px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .edit-avatar-btn {
+            position: absolute;
+            bottom: 5px;
+            right: calc(50% - 55px);
+            background: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s;
+        }
+
+        .edit-avatar-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-info {
+            text-align: center;
+            padding: 0 24px 24px;
+            border-bottom: 1px solid #e2e2e2;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .profile-username {
+            color: #767676;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .profile-bio {
+            color: #111;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e2e2;
+        }
+
+        .stat-item {
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .stat-item:hover {
+            opacity: 0.7;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #767676;
+        }
+
+        .edit-form {
+            padding: 24px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #111;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e2e2;
+            border-radius: 16px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #e60023;
+        }
+
+        .form-group input.error {
+            border-color: #e60023;
+            background: #fff5f5;
+        }
+
+        .error-message {
+            color: #e60023;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .save-btn {
+            flex: 1;
+            padding: 12px;
+            background: #e60023;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #ad081b;
+        }
+
+        .save-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            padding: 12px;
+            background: #efefef;
+            color: #111;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background: #e2e2e2;
+        }
+
+        /* Sección de usuarios seguidos */
+        .following-section {
+            padding: 24px;
+            border-top: 1px solid #e2e2e2;
+        }
+
+        .following-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .following-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .following-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 16px;
+            transition: background 0.2s;
+        }
+
+        .following-item:hover {
+            background: #efefef;
+        }
+
+        .following-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .following-info {
+            flex: 1;
+        }
+
+        .following-info strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .following-info span {
+            font-size: 12px;
+            color: #767676;
+        }
+
+        .unfollow-btn {
+            background: transparent;
+            border: 1px solid #e2e2e2;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .unfollow-btn:hover {
+            background: #e60023;
+            color: white;
+            border-color: #e60023;
+        }
+
+        .empty-following {
+            text-align: center;
+            padding: 40px;
+            color: #767676;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-error {
+            background: #fff5f5;
+            color: #e60023;
+            border: 1px solid #ffcdcd;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e2e2e2;
+            border-top-color: #e60023;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .profile-container {
+                padding: 0 16px;
+                margin: 20px auto;
+            }
+            .profile-name {
+                font-size: 24px;
+            }
+            .stats {
+                gap: 24px;
+            }
+            .stat-number {
+                font-size: 20px;
+            }
+            .following-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>Mi Perfil</h1>
+    </div>
+
+    <div class="profile-container" id="profileContainer">
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Cargando perfil...</p>
+        </div>
+
+        <div id="profileContent" style="display: none;">
+            <div class="profile-card">
+                <div class="cover-banner"></div>
+                
+                <div class="avatar-section">
+                    <div class="profile-avatar" id="profileAvatar"></div>
+                    <button class="edit-avatar-btn" id="editAvatarBtn" title="Cambiar color de avatar">
+                        <i class="fas fa-paint-bucket"></i>
+                    </button>
+                </div>
+
+                <div class="profile-info">
+                    <h2 class="profile-name" id="profileName"></h2>
+                    <p class="profile-username" id="profileUsername"></p>
+                    <p class="profile-bio" id="profileBio"></p>
+                    
+                    <div class="stats">
+                        <div class="stat-item" id="postsStat">
+                            <div class="stat-number" id="postsCount">0</div>
+                            <div class="stat-label">Publicaciones</div>
+                        </div>
+                        <div class="stat-item" id="followersStat">
+                            <div class="stat-number" id="followersCount">0</div>
+                            <div class="stat-label">Seguidores</div>
+                        </div>
+                        <div class="stat-item" id="followingStat">
+                            <div class="stat-number" id="followingCount">0</div>
+                            <div class="stat-label">Siguiendo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-form">
+                    <div class="form-title">
+                        <i class="fas fa-edit"></i>
+                        <span>Editar perfil</span>
+                    </div>
+
+                    <div id="formAlert" class="alert"></div>
+
+                    <form id="editProfileForm">
+                        <div class="form-group">
+                            <label>Nombre completo</label>
+                            <input type="text" id="nombre" placeholder="Tu nombre">
+                            <div id="nombreError" class="error-message">El nombre es obligatorio</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombre de usuario</label>
+                            <input type="text" id="username" placeholder="usuario">
+                            <div id="usernameError" class="error-message">El nombre de usuario es obligatorio</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Correo electrónico</label>
+                            <input type="email" id="email" placeholder="correo@ejemplo.com">
+                            <div id="emailError" class="error-message">Ingresa un correo válido</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Edad</label>
+                            <input type="number" id="edad" min="13" max="120">
+                            <div id="edadError" class="error-message">Debes tener al menos 13 años</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nueva contraseña (dejar vacío si no quieres cambiarla)</label>
+                            <input type="password" id="password" placeholder="••••••••">
+                            <div id="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="save-btn" id="saveBtn">Guardar cambios</button>
+                            <button type="button" class="cancel-btn" id="cancelBtn">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sección: A quiénes sigo -->
+                <div class="following-section">
+                    <div class="following-title">
+                        <i class="fas fa-users"></i>
+                        <span>A quiénes sigo</span>
+                    </div>
+                    <div id="followingList" class="following-list">
+                        <!-- Lista de usuarios seguidos -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let currentUser = null;
+            let allUsers = [];
+            let followingList = [];
+            let avatarColors = ['#e60023', '#0076d3', '#008a15', '#e600b3', '#e6b300', '#00b3e6', '#7600d3', '#d35400', '#1abc9c', '#2c3e50'];
+
+            // Verificar autenticación
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+            if (!token || !user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // ========== FUNCIONES DE SEGUIDORES ==========
+            function getFollowingKey() {
+                return `following_${currentUser.id}`;
+            }
+
+            function loadFollowing() {
+                const key = getFollowingKey();
+                const saved = localStorage.getItem(key);
+                followingList = saved ? JSON.parse(saved) : [];
+                updateFollowingCount();
+                renderFollowingList();
+            }
+
+            function saveFollowing() {
+                const key = getFollowingKey();
+                localStorage.setItem(key, JSON.stringify(followingList));
+                updateFollowingCount();
+                renderFollowingList();
+            }
+
+            function updateFollowingCount() {
+                $('#followingCount').text(followingList.length);
+            }
+
+            function isFollowing(userId) {
+                return followingList.some(f => f.id === userId);
+            }
+
+            function followUser(userToFollow) {
+                if (!isFollowing(userToFollow.id)) {
+                    followingList.push({
+                        id: userToFollow.id,
+                        nombre: userToFollow.nombre,
+                        username: userToFollow.username,
+                        avatar_color: userToFollow.avatar_color
+                    });
+                    saveFollowing();
+                    return true;
+                }
+                return false;
+            }
+
+            function unfollowUser(userId) {
+                followingList = followingList.filter(f => f.id !== userId);
+                saveFollowing();
+                return true;
+            }
+
+            // Cargar todos los usuarios de la API
+            function loadAllUsers() {
+                return $.ajax({
+                    url: 'http://localhost:8000/users',
+                    method: 'GET',
+                    success: function(users) {
+                        allUsers = users;
+                    },
+                    error: function() {
+                        allUsers = [];
+                    }
+                });
+            }
+
+            function renderFollowingList() {
+                const container = $('#followingList');
+                container.empty();
+
+                if (followingList.length === 0) {
+                    container.html('<div class="empty-following"><i class="fas fa-user-plus"></i><p>No sigues a nadie todavía. ¡Explora y sigue a otros usuarios!</p></div>');
+                    return;
+                }
+
+                followingList.forEach(followed => {
+                    const item = `
+                        <div class="following-item" data-user-id="${followed.id}">
+                            <div class="following-avatar" style="background-color: ${followed.avatar_color || '#e60023'}">
+                                ${followed.nombre ? followed.nombre.charAt(0).toUpperCase() : followed.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div class="following-info">
+                                <strong>${escapeHtml(followed.nombre)}</strong>
+                                <span>@${escapeHtml(followed.username)}</span>
+                            </div>
+                            <button class="unfollow-btn" data-id="${followed.id}">Dejar de seguir</button>
+                        </div>
+                    `;
+                    container.append(item);
+                });
+
+                // Eventos para dejar de seguir
+                $('.unfollow-btn').on('click', function(e) {
+                    e.stopPropagation();
+                    const userId = $(this).data('id');
+                    unfollowUser(userId);
+                    showAlert(`Has dejado de seguir al usuario`, 'success');
+                });
+            }
+
+            // ========== FUNCIONES DE PERFIL ==========
+            function loadUserData() {
+                $('#loading').show();
+                $('#profileContent').hide();
+
+                $.ajax({
+                    url: 'http://localhost:8000/api/auth/me',
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    success: function(response) {
+                        currentUser = response;
+                        updateProfileUI();
+                        loadUserPosts();
+                        loadFollowing();
+                        loadAllUsers().then(() => {
+                            $('#loading').hide();
+                            $('#profileContent').show();
+                        });
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            window.location.href = 'login.html';
+                        } else {
+                            $('#loading').html('<p style="color: #e60023;">Error al cargar el perfil</p>');
+                        }
+                    }
+                });
+            }
+
+            function updateProfileUI() {
+                const initial = currentUser.nombre ? currentUser.nombre.charAt(0).toUpperCase() : currentUser.username.charAt(0).toUpperCase();
+                $('#profileAvatar').text(initial).css('background-color', currentUser.avatar_color);
+                $('#profileName').text(currentUser.nombre);
+                $('#profileUsername').text('@' + currentUser.username);
+                $('#profileBio').text(currentUser.bio || 'Amante del arte y la creatividad ✨');
+                
+                $('#nombre').val(currentUser.nombre);
+                $('#username').val(currentUser.username);
+                $('#email').val(currentUser.email);
+                $('#edad').val(currentUser.edad);
+                $('#password').val('');
+            }
+
+            function loadUserPosts() {
+                $.ajax({
+                    url: 'http://localhost:8000/posts',
+                    method: 'GET',
+                    success: function(posts) {
+                        const userPosts = posts.filter(post => post.autor_id === currentUser.id);
+                        $('#postsCount').text(userPosts.length);
+                    },
+                    error: function() {
+                        $('#postsCount').text('0');
+                    }
+                });
+            }
+
+            // Calcular seguidores (cuántos usuarios te siguen)
+            function updateFollowersCount() {
+                let followers = 0;
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('following_')) {
+                        const userId = key.replace('following_', '');
+                        if (userId !== String(currentUser.id)) {
+                            const following = JSON.parse(localStorage.getItem(key));
+                            if (following.some(f => f.id === currentUser.id)) {
+                                followers++;
+                            }
+                        }
+                    }
+                }
+                $('#followersCount').text(followers);
+            }
+
+            // ========== EDITAR PERFIL ==========
+            $('#editAvatarBtn').on('click', function() {
+                const currentColor = currentUser.avatar_color;
+                let newColorIndex = (avatarColors.indexOf(currentColor) + 1) % avatarColors.length;
+                if (newColorIndex === -1) newColorIndex = 0;
+                const newColor = avatarColors[newColorIndex];
+                
+                $.ajax({
+                    url: `http://localhost:8000/api/auth/users/${currentUser.id}`,
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    data: JSON.stringify({ avatar_color: newColor }),
+                    success: function(response) {
+                        currentUser = response;
+                        localStorage.setItem('user', JSON.stringify(currentUser));
+                        $('#profileAvatar').css('background-color', newColor);
+                        showAlert('Color de avatar actualizado', 'success');
+                    },
+                    error: function() {
+                        showAlert('Error al cambiar el color', 'error');
+                    }
+                });
+            });
+
+            function isValidEmail(email) {
+                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return regex.test(email);
+            }
+
+            $('#editProfileForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                const nombre = $('#nombre').val().trim();
+                const username = $('#username').val().trim();
+                const email = $('#email').val().trim();
+                const edad = parseInt($('#edad').val());
+                const password = $('#password').val();
+                
+                if (!nombre) {
+                    $('#nombre').addClass('error');
+                    $('#nombreError').show();
+                    isValid = false;
+                } else {
+                    $('#nombre').removeClass('error');
+                    $('#nombreError').hide();
+                }
+                
+                if (!username) {
+                    $('#username').addClass('error');
+                    $('#usernameError').show();
+                    isValid = false;
+                } else {
+                    $('#username').removeClass('error');
+                    $('#usernameError').hide();
+                }
+                
+                if (!email || !isValidEmail(email)) {
+                    $('#email').addClass('error');
+                    $('#emailError').show();
+                    isValid = false;
+                } else {
+                    $('#email').removeClass('error');
+                    $('#emailError').hide();
+                }
+                
+                if (!edad || edad < 13 || edad > 120) {
+                    $('#edad').addClass('error');
+                    $('#edadError').show();
+                    isValid = false;
+                } else {
+                    $('#edad').removeClass('error');
+                    $('#edadError').hide();
+                }
+                
+                if (password && password.length < 6) {
+                    $('#password').addClass('error');
+                    $('#passwordError').show();
+                    isValid = false;
+                } else {
+                    $('#password').removeClass('error');
+                    $('#passwordError').hide();
+                }
+                
+                if (!isValid) return;
+                
+                const updateData = { nombre, username, email, edad };
+                if (password) updateData.password = password;
+                
+                const $btn = $('#saveBtn');
+                const originalText = $btn.text();
+                $btn.text('Guardando...').prop('disabled', true);
+                
+                $.ajax({
+                    url: `http://localhost:8000/api/auth/users/${currentUser.id}`,
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    data: JSON.stringify(updateData),
+                    success: function(response) {
+                        currentUser = response;
+                        localStorage.setItem('user', JSON.stringify(currentUser));
+                        updateProfileUI();
+                        showAlert('Perfil actualizado correctamente', 'success');
+                        $btn.text(originalText).prop('disabled', false);
+                    },
+                    error: function(xhr) {
+                        let errorMsg = 'Error al actualizar el perfil';
+                        if (xhr.responseJSON && xhr.responseJSON.detail) errorMsg = xhr.responseJSON.detail;
+                        showAlert(errorMsg, 'error');
+                        $btn.text(originalText).prop('disabled', false);
+                    }
+                });
+            });
+            
+            $('#cancelBtn').on('click', function() {
+                updateProfileUI();
+                showAlert('Cambios descartados', 'success');
+            });
+            
+            function showAlert(message, type) {
+                const $alert = $('#formAlert');
+                $alert.text(message);
+                $alert.removeClass('alert-success alert-error');
+                $alert.addClass(type === 'error' ? 'alert-error' : 'alert-success');
+                $alert.show();
+                setTimeout(() => $alert.fadeOut(), 3000);
+            }
+            
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            $('input').on('input', function() {
+                $(this).removeClass('error');
+                $(this).closest('.form-group').find('.error-message').hide();
+            });
+            
+            // Actualizar contador de seguidores periódicamente
+            function startFollowersUpdater() {
+                updateFollowersCount();
+                setInterval(() => updateFollowersCount(), 2000);
+            }
+            
+            loadUserData();
+            startFollowersUpdater();
+        });
+    </script>
+
+</body>
+</html>

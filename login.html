@@ -3,91 +3,379 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinterest - Iniciar Sesión</title>
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/auth.css">
-    <!-- Incluir jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Iniciar sesión - Publify</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .error-message {
-            background-color: #ffeef0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+            padding: 40px 32px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 32px;
+        }
+
+        .logo i {
+            font-size: 64px;
             color: #e60023;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            margin-top: 8px;
+            color: #111;
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .login-subtitle {
+            color: #767676;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #111;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #767676;
+            font-size: 18px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid #e2e2e2;
+            border-radius: 28px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #e60023;
+        }
+
+        .input-wrapper input.error {
+            border-color: #e60023;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #e60023;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e60023;
+            color: white;
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+        .login-btn:hover {
+            background: #ad081b;
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            margin: 24px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e2e2;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 16px;
+            position: relative;
+            color: #767676;
+            font-size: 14px;
+        }
+
+        .register-link {
+            margin-top: 24px;
+            color: #767676;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #e60023;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: block;
+            margin-top: 20px;
+            color: #767676;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-home:hover {
+            color: #111;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
             font-size: 14px;
             display: none;
-            border: 1px solid #ffd2d6;
-            font-weight: 500;
+        }
+
+        .alert-error {
+            background: #fff5f5;
+            color: #e60023;
+            border: 1px solid #ffcdcd;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+            
+            .login-title {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="auth-wrapper">
-        <div class="auth-card">
-            <a href="index.html" style="text-decoration: none;"><div class="auth-logo">P</div></a>
-            <h1>Te damos la bienvenida</h1>
-            <p>Encuentra nuevas ideas para tus maquetados</p>
-            
-            <div id="error-alert" class="error-message"></div>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fab fa-pinterest"></i>
+                <h1>Publify</h1>
+            </div>
 
-            <form class="auth-form" id="login-form">
-                <input type="text" id="identifier" placeholder="Correo electrónico o usuario" required>
-                <input type="password" id="password" placeholder="Contraseña" required>
-                <button type="submit" class="btn-auth-submit">Iniciar Sesión</button>
+            <h2 class="login-title">Bienvenido</h2>
+            <p class="login-subtitle">Inicia sesión para continuar</p>
+
+            <div id="alertMessage" class="alert"></div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>Usuario o correo electrónico</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="identifier" placeholder="Ej: usuario123 o correo@ejemplo.com" autocomplete="username">
+                    </div>
+                    <div id="identifierError" class="error-message">Por favor ingresa tu usuario o correo</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+                    </div>
+                    <div id="passwordError" class="error-message">Por favor ingresa tu contraseña</div>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Iniciar sesión</button>
             </form>
-            <div class="auth-switch">¿No tienes cuenta? <a href="register.html">Regístrate</a></div>
+
+            <div class="divider">
+                <span>o</span>
+            </div>
+
+            <div class="register-link">
+                ¿No tienes una cuenta? <a href="register.html">Regístrate</a>
+            </div>
+
+            <a href="index.html" class="back-home">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Si ya está logueado, redirigir al index
-            if (localStorage.getItem("currentUser")) {
-                window.location.href = "index.html";
+            // Si ya hay sesión activa, redirigir al index
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Verificar si el token sigue siendo válido
+                $.ajax({
+                    url: 'http://localhost:8000/api/auth/verify',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    success: function() {
+                        window.location.href = 'index.html';
+                    },
+                    error: function() {
+                        // Token inválido, limpiar
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                    }
+                });
             }
 
-            $("#login-form").on("submit", function(e) {
+            // Limpiar errores al escribir
+            $('#identifier, #password').on('input', function() {
+                $(this).removeClass('error');
+                $(this).closest('.input-group').find('.error-message').hide();
+                $('#alertMessage').hide();
+            });
+
+            // Enviar formulario
+            $('#loginForm').on('submit', function(e) {
                 e.preventDefault();
                 
-                const identifier = $("#identifier").val().trim();
-                const password = $("#password").val();
-                const $errorAlert = $("#error-alert");
-
-                $errorAlert.hide().text("");
-
-                if (!identifier || !password) {
-                    $errorAlert.text("Por favor, completa todos los campos.").fadeIn();
-                    return;
+                let isValid = true;
+                const identifier = $('#identifier').val().trim();
+                const password = $('#password').val();
+                
+                // Validaciones
+                if (!identifier) {
+                    $('#identifier').addClass('error');
+                    $('#identifierError').show();
+                    isValid = false;
                 }
-
-                // Deshabilitar botón de enviar para feedback
-                const $submitBtn = $(this).find("button[type='submit']");
-                $submitBtn.prop("disabled", true).text("Iniciando sesión...");
-
+                
+                if (!password) {
+                    $('#password').addClass('error');
+                    $('#passwordError').show();
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // Mostrar loading
+                const $btn = $('#loginBtn');
+                const originalText = $btn.text();
+                $btn.text('Iniciando sesión...').prop('disabled', true);
+                
+                // Llamar a la API
                 $.ajax({
-                    url: "http://127.0.0.1:8000/api/auth/login",
-                    type: "POST",
-                    contentType: "application/json",
+                    url: 'http://localhost:8000/api/auth/login',
+                    method: 'POST',
+                    contentType: 'application/json',
                     data: JSON.stringify({
                         identifier: identifier,
                         password: password
                     }),
                     success: function(response) {
-                        // Guardar datos del usuario
-                        localStorage.setItem("currentUser", JSON.stringify(response));
-                        window.location.href = "index.html";
+                        // Guardar token y datos del usuario
+                        localStorage.setItem('token', response.access_token);
+                        localStorage.setItem('user', JSON.stringify(response.user));
+                        
+                        // Mostrar mensaje de éxito
+                        showAlert('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
+                        
+                        // Redirigir al index
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1000);
                     },
                     error: function(xhr) {
-                        $submitBtn.prop("disabled", false).text("Iniciar Sesión");
-                        let errorMsg = "Ocurrió un error al iniciar sesión.";
+                        let errorMsg = 'Error al iniciar sesión';
                         if (xhr.responseJSON && xhr.responseJSON.detail) {
                             errorMsg = xhr.responseJSON.detail;
                         }
-                        $errorAlert.text(errorMsg).fadeIn();
+                        showAlert(errorMsg, 'error');
+                        $btn.text(originalText).prop('disabled', false);
                     }
                 });
             });
+            
+            function showAlert(message, type) {
+                const $alert = $('#alertMessage');
+                $alert.text(message);
+                $alert.removeClass('alert-error alert-success');
+                $alert.addClass(type === 'error' ? 'alert-error' : 'alert-success');
+                $alert.show();
+                
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    $alert.fadeOut();
+                }, 5000);
+            }
         });
     </script>
 </body>

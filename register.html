@@ -3,106 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinterest - Registro</title>
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/auth.css">
-    <!-- Incluir jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Registrarse - Publify</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .error-message {
-            background-color: #ffeef0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 520px;
+            padding: 20px;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+            padding: 40px 32px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 24px;
+        }
+
+        .logo i {
+            font-size: 56px;
             color: #e60023;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            margin-top: 4px;
+            color: #111;
+        }
+
+        .register-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .register-subtitle {
+            color: #767676;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #111;
+            font-size: 13px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #767676;
+            font-size: 16px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 14px 12px 44px;
+            border: 2px solid #e2e2e2;
+            border-radius: 28px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #e60023;
+        }
+
+        .input-wrapper input.error {
+            border-color: #e60023;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #e60023;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e60023;
+            color: white;
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+        .register-btn:hover {
+            background: #ad081b;
+        }
+
+        .register-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            margin: 24px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e2e2;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 16px;
+            position: relative;
+            color: #767676;
+            font-size: 14px;
+        }
+
+        .login-link {
+            margin-top: 24px;
+            color: #767676;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #e60023;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: block;
+            margin-top: 20px;
+            color: #767676;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-home:hover {
+            color: #111;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
             font-size: 14px;
             display: none;
-            border: 1px solid #ffd2d6;
-            font-weight: 500;
+        }
+
+        .alert-error {
+            background: #fff5f5;
+            color: #e60023;
+            border: 1px solid #ffcdcd;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .register-card {
+                padding: 32px 24px;
+            }
+            
+            .register-title {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="auth-wrapper">
-        <div class="auth-card">
-            <a href="index.html" style="text-decoration: none;"><div class="auth-logo">P</div></a>
-            <h1>Crea tu cuenta</h1>
-            <p>Explora nuevas ideas y organiza tus proyectos</p>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="logo">
+                <i class="fab fa-pinterest"></i>
+                <h1>Publify</h1>
+            </div>
 
-            <div id="error-alert" class="error-message"></div>
+            <h2 class="register-title">Crear cuenta</h2>
+            <p class="register-subtitle">Únete a nuestra comunidad</p>
 
-            <form class="auth-form" id="register-form">
-                <input type="text" id="nombre" placeholder="Nombre completo" required>
-                <input type="text" id="username" placeholder="Nombre de usuario (ej: juan_perez)" required>
-                <input type="email" id="email" placeholder="Correo electrónico" required>
-                <input type="password" id="password" placeholder="Crea una contraseña" required>
-                <input type="number" id="edad" placeholder="Edad" min="1" required>
-                <button type="submit" class="btn-auth-submit">Continuar</button>
+            <div id="alertMessage" class="alert"></div>
+
+            <form id="registerForm">
+                <div class="input-group">
+                    <label>Nombre completo</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="nombre" placeholder="Tu nombre" autocomplete="name">
+                    </div>
+                    <div id="nombreError" class="error-message">El nombre es obligatorio</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Nombre de usuario</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-at"></i>
+                        <input type="text" id="username" placeholder="usuario123" autocomplete="username">
+                    </div>
+                    <div id="usernameError" class="error-message">El nombre de usuario es obligatorio</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Correo electrónico</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="correo@ejemplo.com" autocomplete="email">
+                    </div>
+                    <div id="emailError" class="error-message">Ingresa un correo válido</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Edad</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="number" id="edad" placeholder="18" min="13" max="120">
+                    </div>
+                    <div id="edadError" class="error-message">Debes tener al menos 13 años</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                    </div>
+                    <div id="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+                </div>
+
+                <button type="submit" class="register-btn" id="registerBtn">Registrarse</button>
             </form>
-            <div class="auth-switch">¿Ya eres miembro? <a href="login.html">Inicia sesión</a></div>
+
+            <div class="divider">
+                <span>o</span>
+            </div>
+
+            <div class="login-link">
+                ¿Ya tienes una cuenta? <a href="login.html">Iniciar sesión</a>
+            </div>
+
+            <a href="index.html" class="back-home">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Si ya está logueado, redirigir al index
-            if (localStorage.getItem("currentUser")) {
-                window.location.href = "index.html";
+            // Si ya hay sesión activa, redirigir al index
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.href = 'index.html';
             }
 
-            $("#register-form").on("submit", function(e) {
+            // Limpiar errores al escribir
+            $('input').on('input', function() {
+                $(this).removeClass('error');
+                $(this).closest('.input-group').find('.error-message').hide();
+                $('#alertMessage').hide();
+            });
+
+            // Validar email
+            function isValidEmail(email) {
+                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return regex.test(email);
+            }
+
+            // Enviar formulario
+            $('#registerForm').on('submit', function(e) {
                 e.preventDefault();
-
-                const nombre = $("#nombre").val().trim();
-                const username = $("#username").val().trim();
-                const email = $("#email").val().trim();
-                const password = $("#password").val();
-                const edad = parseInt($("#edad").val());
-                const $errorAlert = $("#error-alert");
-
-                $errorAlert.hide().text("");
-
-                // Validaciones adicionales en JS
-                if (!nombre || !username || !email || !password || isNaN(edad)) {
-                    $errorAlert.text("Por favor, completa todos los campos.").fadeIn();
-                    return;
+                
+                let isValid = true;
+                
+                const nombre = $('#nombre').val().trim();
+                const username = $('#username').val().trim();
+                const email = $('#email').val().trim();
+                const edad = parseInt($('#edad').val());
+                const password = $('#password').val();
+                
+                // Validaciones
+                if (!nombre) {
+                    $('#nombre').addClass('error');
+                    $('#nombreError').show();
+                    isValid = false;
                 }
-
-                if (password.length < 4) {
-                    $errorAlert.text("La contraseña debe tener al menos 4 caracteres.").fadeIn();
-                    return;
+                
+                if (!username) {
+                    $('#username').addClass('error');
+                    $('#usernameError').show();
+                    isValid = false;
                 }
-
-                const $submitBtn = $(this).find("button[type='submit']");
-                $submitBtn.prop("disabled", true).text("Creando cuenta...");
-
+                
+                if (!email || !isValidEmail(email)) {
+                    $('#email').addClass('error');
+                    $('#emailError').show();
+                    isValid = false;
+                }
+                
+                if (!edad || edad < 13 || edad > 120) {
+                    $('#edad').addClass('error');
+                    $('#edadError').show();
+                    isValid = false;
+                }
+                
+                if (!password || password.length < 6) {
+                    $('#password').addClass('error');
+                    $('#passwordError').show();
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // Mostrar loading
+                const $btn = $('#registerBtn');
+                const originalText = $btn.text();
+                $btn.text('Registrando...').prop('disabled', true);
+                
+                // Llamar a la API
                 $.ajax({
-                    url: "http://127.0.0.1:8000/api/auth/register",
-                    type: "POST",
-                    contentType: "application/json",
+                    url: 'http://localhost:8000/api/auth/register',
+                    method: 'POST',
+                    contentType: 'application/json',
                     data: JSON.stringify({
                         nombre: nombre,
                         username: username,
                         email: email,
-                        password: password,
-                        edad: edad
+                        edad: edad,
+                        password: password
                     }),
                     success: function(response) {
-                        // El backend retorna el objeto Usuario recién creado.
-                        // Iniciamos sesión automáticamente guardándolo en localStorage
-                        localStorage.setItem("currentUser", JSON.stringify(response));
-                        window.location.href = "index.html";
+                        showAlert('¡Registro exitoso! Ahora puedes iniciar sesión.', 'success');
+                        
+                        // Limpiar formulario
+                        $('#registerForm')[0].reset();
+                        
+                        // Redirigir al login después de 2 segundos
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
                     },
                     error: function(xhr) {
-                        $submitBtn.prop("disabled", false).text("Continuar");
-                        let errorMsg = "Ocurrió un error en el registro.";
+                        let errorMsg = 'Error al registrar usuario';
                         if (xhr.responseJSON && xhr.responseJSON.detail) {
                             errorMsg = xhr.responseJSON.detail;
                         }
-                        $errorAlert.text(errorMsg).fadeIn();
+                        showAlert(errorMsg, 'error');
+                        $btn.text(originalText).prop('disabled', false);
                     }
                 });
             });
+            
+            function showAlert(message, type) {
+                const $alert = $('#alertMessage');
+                $alert.text(message);
+                $alert.removeClass('alert-error alert-success');
+                $alert.addClass(type === 'error' ? 'alert-error' : 'alert-success');
+                $alert.show();
+                
+                setTimeout(() => {
+                    $alert.fadeOut();
+                }, 5000);
+            }
         });
     </script>
 </body>

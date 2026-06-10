@@ -1,3 +1,4 @@
+/* ========== RESET Y VARIABLES ========== */
 :root {
     --pinterest-red: #e60023;
     --pinterest-red-hover: #ad081b;
@@ -5,7 +6,6 @@
     --gray-border: #e2e2e2;
     --text-dark: #111111;
     --text-gray: #767676;
-    --sidebar-width: 240px;
 }
 
 * {
@@ -20,80 +20,8 @@ body {
     color: var(--text-dark);
 }
 
-/* ========== APP CONTAINER CON SIDEBAR ========== */
-.app-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* ========== BARRA LATERAL IZQUIERDA ========== */
-.sidebar {
-    width: var(--sidebar-width);
-    background: white;
-    border-right: 1px solid var(--gray-border);
-    position: fixed;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 24px 16px;
-    z-index: 100;
-}
-
-.sidebar-logo {
-    font-size: 32px;
-    color: var(--pinterest-red);
-    margin-bottom: 40px;
-    padding-left: 12px;
-}
-
-.sidebar-nav {
-    flex: 1;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-bottom: 4px;
-}
-
-.nav-item:hover {
-    background: var(--gray-bg);
-}
-
-.nav-item.active {
-    background: var(--gray-bg);
-    font-weight: 500;
-}
-
-.nav-item i {
-    width: 24px;
-    font-size: 20px;
-    color: var(--text-dark);
-}
-
-.nav-item span {
-    font-size: 15px;
-}
-
-.sidebar-footer {
-    border-top: 1px solid var(--gray-border);
-    padding-top: 16px;
-    margin-top: auto;
-}
-
-/* ========== CONTENIDO PRINCIPAL ========== */
-.main-content {
-    flex: 1;
-    margin-left: var(--sidebar-width);
-}
-
-/* ========== HEADER ========== */
-.header {
+/* ========== HEADER CON AUTENTICACIÓN ========== */
+.detail-header {
     position: sticky;
     top: 0;
     background: white;
@@ -148,16 +76,42 @@ body {
     width: 100%;
 }
 
-.header-right {
+/* ========== SECCIÓN DE AUTENTICACIÓN ========== */
+.header-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
 }
 
-.header-right i {
-    font-size: 22px;
+.auth-btn {
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.login-btn-header {
+    background: transparent;
     color: var(--text-dark);
-    cursor: pointer;
+}
+
+.login-btn-header:hover {
+    background: var(--gray-bg);
+}
+
+.register-btn-header {
+    background: var(--pinterest-red);
+    color: white;
+}
+
+.register-btn-header:hover {
+    background: var(--pinterest-red-hover);
+}
+
+.user-menu {
+    position: relative;
 }
 
 .profile-icon {
@@ -165,24 +119,96 @@ body {
     align-items: center;
     gap: 8px;
     cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 40px;
+    transition: background 0.2s;
 }
 
-.profile-icon img {
+.profile-icon:hover {
+    background: var(--gray-bg);
+}
+
+.user-avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
 }
 
-/* ========== CONTENEDOR DEL PIN ========== */
-.pin-container {
+.user-dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    min-width: 220px;
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+}
+
+.dropdown-header {
+    padding: 12px 16px;
+}
+
+.dropdown-header strong {
+    display: block;
+    font-size: 14px;
+}
+
+.dropdown-header span {
+    font-size: 12px;
+    color: var(--text-gray);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--gray-border);
+    margin: 4px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+}
+
+.dropdown-item:hover {
+    background: var(--gray-bg);
+}
+
+.logout-btn {
+    color: var(--pinterest-red);
+}
+
+.logout-btn i {
+    color: var(--pinterest-red);
+}
+
+/* ========== CONTENEDOR PRINCIPAL ========== */
+.pin-detail-container {
     max-width: 1200px;
     margin: 40px auto;
     padding: 0 24px;
 }
 
 /* ========== CARTA PRINCIPAL ========== */
-.pin-main-card {
+.pin-detail-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 32px;
@@ -192,8 +218,8 @@ body {
     overflow: hidden;
 }
 
-/* ========== SECCIÓN IMAGEN CON OVERLAY ========== */
-.pin-image-section {
+/* ========== SECCIÓN IMAGEN ========== */
+.pin-detail-image {
     position: relative;
     background: var(--gray-bg);
     min-height: 550px;
@@ -202,13 +228,14 @@ body {
     justify-content: center;
 }
 
-.pin-image-section img {
+.pin-detail-image img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     display: block;
 }
 
+/* BOTONES SOBRE LA IMAGEN */
 .image-overlay {
     position: absolute;
     top: 16px;
@@ -220,7 +247,7 @@ body {
     transition: opacity 0.3s ease;
 }
 
-.pin-image-section:hover .image-overlay {
+.pin-detail-image:hover .image-overlay {
     opacity: 1;
 }
 
@@ -241,6 +268,7 @@ body {
     background: white;
 }
 
+/* CONTADOR DE LIKES */
 .likes-count {
     position: absolute;
     bottom: 16px;
@@ -262,46 +290,55 @@ body {
 }
 
 /* ========== SECCIÓN INFORMACIÓN ========== */
-.pin-info-section {
+.pin-detail-info {
     padding: 32px 32px 32px 0;
     display: flex;
     flex-direction: column;
 }
 
-.pin-actions-top {
+.pin-detail-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
     margin-bottom: 24px;
 }
 
-.action-btn {
-    padding: 10px 20px;
-    border-radius: 40px;
+.btn-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     border: none;
-    font-weight: 600;
-    font-size: 14px;
+    background: var(--gray-bg);
     cursor: pointer;
-    transition: all 0.2s;
+    font-size: 18px;
+    transition: background 0.2s;
 }
 
-.save-btn {
+.btn-icon:hover {
+    background: var(--gray-border);
+}
+
+.btn-save {
     background: var(--pinterest-red);
     color: white;
+    border: none;
+    border-radius: 40px;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
 }
 
-.save-btn:hover {
+.btn-save:hover {
     background: var(--pinterest-red-hover);
 }
 
-.more-btn {
-    background: var(--gray-bg);
-    width: 40px;
-    padding: 10px;
-}
-
 /* ========== AUTOR ========== */
-.author-section {
+.pin-author {
     display: flex;
     align-items: center;
     gap: 16px;
@@ -310,24 +347,24 @@ body {
     border-bottom: 1px solid var(--gray-border);
 }
 
-.author-avatar img {
+.pin-author img {
     width: 56px;
     height: 56px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.author-details {
+.author-info {
     flex: 1;
 }
 
-.author-details strong {
+.author-info strong {
     display: block;
     font-size: 16px;
     margin-bottom: 4px;
 }
 
-.author-details span {
+.author-info span {
     font-size: 13px;
     color: var(--text-gray);
 }
@@ -349,7 +386,7 @@ body {
 }
 
 /* ========== TÍTULO ========== */
-.pin-info-section h1 {
+.pin-detail-info h2 {
     font-size: 32px;
     font-weight: 600;
     margin-bottom: 12px;
@@ -363,7 +400,7 @@ body {
 }
 
 /* ========== COMENTARIOS ========== */
-.comments-wrapper {
+.comments-section {
     flex: 1;
     margin-top: 16px;
 }
@@ -377,7 +414,7 @@ body {
     font-weight: 600;
 }
 
-.comments-list {
+#comments-list {
     max-height: 320px;
     overflow-y: auto;
     margin-bottom: 20px;
@@ -389,11 +426,8 @@ body {
     margin-bottom: 20px;
 }
 
-.comment-avatar-img img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
+.comment-avatar-img {
+    flex-shrink: 0;
 }
 
 .comment-content-detail {
@@ -405,6 +439,7 @@ body {
     align-items: center;
     gap: 8px;
     margin-bottom: 4px;
+    flex-wrap: wrap;
 }
 
 .comment-header-detail strong {
@@ -435,27 +470,19 @@ body {
 }
 
 /* ========== INPUT COMENTARIO ========== */
-.comment-input-wrapper {
+.comment-input-container {
     display: flex;
+    align-items: center;
     gap: 12px;
     padding-top: 16px;
     border-top: 1px solid var(--gray-border);
 }
 
-.comment-avatar-small img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
+.comment-avatar-mini {
+    flex-shrink: 0;
 }
 
-.comment-input-field {
-    flex: 1;
-    display: flex;
-    gap: 8px;
-}
-
-.comment-input-field input {
+.comment-input-container input {
     flex: 1;
     border: 1px solid var(--gray-border);
     border-radius: 40px;
@@ -465,11 +492,11 @@ body {
     transition: border-color 0.2s;
 }
 
-.comment-input-field input:focus {
+.comment-input-container input:focus {
     border-color: var(--pinterest-red);
 }
 
-.send-comment-btn {
+.submit-comment-btn {
     background: var(--pinterest-red);
     color: white;
     border: none;
@@ -480,16 +507,18 @@ body {
     transition: background 0.2s;
 }
 
-.send-comment-btn:hover {
+.submit-comment-btn:hover {
     background: var(--pinterest-red-hover);
 }
 
-/* ========== MÁS IDEAS ========== */
-.more-ideas-section {
-    margin-top: 60px;
+/* ========== SECCIÓN MÁS IDEAS ========== */
+.more-ideas {
+    max-width: 1200px;
+    margin: 60px auto 40px;
+    padding: 0 24px;
 }
 
-.more-ideas-section h3 {
+.more-ideas h3 {
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 24px;
@@ -502,7 +531,6 @@ body {
 }
 
 .related-pin {
-    position: relative;
     cursor: pointer;
     border-radius: 16px;
     overflow: hidden;
@@ -522,29 +550,19 @@ body {
 }
 
 .related-pin-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
     padding: 12px;
-    color: white;
+    background: white;
 }
 
 .related-pin-overlay p {
     font-size: 14px;
     font-weight: 500;
+    margin-bottom: 4px;
 }
 
 .related-pin-overlay span {
     font-size: 12px;
-    opacity: 0.8;
-}
-
-.no-related {
-    text-align: center;
     color: var(--text-gray);
-    padding: 40px;
 }
 
 /* ========== MODAL PARA AMPLIAR IMAGEN ========== */
@@ -587,21 +605,24 @@ body {
     color: var(--pinterest-red);
 }
 
+/* ========== ANIMACIONES ========== */
+@keyframes likeAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.like-animation {
+    animation: likeAnimation 0.3s ease !important;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
-    .sidebar {
-        display: none;
-    }
-    
-    .main-content {
-        margin-left: 0;
-    }
-    
-    .pin-main-card {
+    .pin-detail-card {
         grid-template-columns: 1fr;
     }
     
-    .pin-info-section {
+    .pin-detail-info {
         padding: 24px;
     }
     
@@ -615,7 +636,7 @@ body {
 }
 
 @media (max-width: 600px) {
-    .header {
+    .detail-header {
         padding: 10px 16px;
     }
     
@@ -623,12 +644,12 @@ body {
         display: none;
     }
     
-    .pin-container {
+    .pin-detail-container {
         padding: 0 16px;
         margin: 20px auto;
     }
     
-    .pin-info-section h1 {
+    .pin-detail-info h2 {
         font-size: 24px;
     }
     
@@ -637,7 +658,7 @@ body {
         gap: 12px;
     }
     
-    .back-button {
-        display: flex;
+    .more-ideas {
+        padding: 0 16px;
     }
 }

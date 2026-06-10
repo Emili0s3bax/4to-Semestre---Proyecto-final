@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select
 import os
 
-# Cargar variables de entorno locales desde el archivo .env si existe (Evita hardcoding de credenciales)
+# Cargar variables de entorno locales desde el archivo .env si existe
 if os.path.exists(".env"):
     print("Cargando variables de entorno desde el archivo .env...")
     with open(".env", "r") as f:
@@ -17,14 +17,14 @@ if os.path.exists(".env"):
                 except ValueError:
                     pass
 
-from db import create_all_table, engine
+from db import create_all_table, engine, SessionDep
 from models import Categoria, Post, Usuario
 from app.routers import auth, posts, notifications
 
 # Inicializar la aplicación FastAPI con el ciclo de vida de la base de datos
 app = FastAPI(lifespan=create_all_table)
 
-# Configurar CORS para permitir peticiones AJAX seguras desde el navegador
+# Configurar CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -33,7 +33,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Servir archivos estáticos (para las imágenes cargadas de manera local en uploads)
+# Servir archivos estáticos
 static_dir = "static"
 os.makedirs(static_dir, exist_ok=True)
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
@@ -43,7 +43,60 @@ app.include_router(auth.router)
 app.include_router(posts.router)
 app.include_router(notifications.router)
 
-# Evento de inicialización para sembrar datos semilla si la base de datos está vacía
+# ==============================================================================
+# ENDPOINTS ADICIONALES PARA USUARIOS
+# ==============================================================================
+
+@app.get("/users")
+def get_all_users(session: SessionDep, skip: int = 0, limit: int = 100):
+    """
+    Obtiene la lista de todos los usuarios registrados.
+    Solo devuelve información pública: id, nombre, username, avatar_color.
+    """
+    statement = select(Usuario).offset(skip).limit(limit)
+    users = session.exec(statement).all()
+    
+    return [
+        {
+            "id": user.id,
+            "nombre": user.nombre,
+            "username": user.username,
+            "avatar_color": user.avatar_color
+        }
+        for user in users
+    ]
+
+
+@app.get("/users/count")
+def get_users_count(session: SessionDep):
+    """
+    Obtiene el número total de usuarios registrados.
+    """
+    statement = select(Usuario)
+    users = session.exec(statement).all()
+    return {"total_usuarios": len(users)}
+
+
+@app.get("/users/{user_id}")
+def get_user_by_id(user_id: int, session: SessionDep):
+    """
+    Obtiene un usuario específico por su ID.
+    """
+    user = session.get(Usuario, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    return {
+        "id": user.id,
+        "nombre": user.nombre,
+        "username": user.username,
+        "email": user.email,
+        "edad": user.edad,
+        "avatar_color": user.avatar_color
+    }
+
+
+# Evento de inicialización para sembrar datos semilla
 @app.on_event("startup")
 def seed_data():
     with Session(engine) as session:
@@ -59,7 +112,7 @@ def seed_data():
             session.commit()
             print("Categorías iniciales sembradas.")
 
-        # 2. Sembrar un usuario administrador de demostración para los posts iniciales
+        # 2. Sembrar un usuario administrador de demostración
         statement_user = select(Usuario).where(Usuario.username == "pinterest")
         admin_user = session.exec(statement_user).first()
         if not admin_user:
@@ -78,7 +131,7 @@ def seed_data():
             session.refresh(admin_user)
             print("Usuario de demostración creado.")
 
-        # 3. Sembrar Posts iniciales si la tabla está vacía (usando el campo 'url')
+        # 3. Sembrar Posts iniciales
         statement_posts = select(Post)
         existing_posts = session.exec(statement_posts).all()
         if not existing_posts:
@@ -143,7 +196,6 @@ def seed_data():
             session.commit()
             print("Posts iniciales de demostración sembrados.")
 
-            
 
 if __name__ == "__main__":
     import uvicorn

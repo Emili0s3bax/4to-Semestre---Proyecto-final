@@ -3,4 +3,7 @@ uvicorn
 pydantic
 sqlmodel
 python-multipart
-boto3
+boto3
+python-jose[cryptography]
+passlib
+bcrypt
