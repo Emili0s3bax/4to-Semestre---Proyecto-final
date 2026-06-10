@@ -4,86 +4,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Pin</title>
+    <title>Detalle de Pin | Pinterest</title>
 
-    <!-- CSS externo -->
     <link rel="stylesheet" href="/css/detalle.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
 
-    <!-- Botón para regresar -->
-    <button class="back-button" onclick="window.location.href='index.html'">← Volver</button>
-
-    <div class="pin-detail-container">
-
-        <div class="pin-detail-card">
-
-            <!-- Imagen principal -->
-            <div class="pin-detail-image">
-                <img id="main-image" src="" alt="Pin">
+    <div class="app-container">
+        
+        <!-- BARRA LATERAL IZQUIERDA -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fab fa-pinterest"></i>
             </div>
-
-            <!-- Información -->
-            <div class="pin-detail-info">
-
-                <div class="pin-detail-actions">
-                    <button class="btn-icon">↗</button>
-                    <button class="btn-icon">⋯</button>
-                    <button class="btn-save">Guardar</button>
+            <nav class="sidebar-nav">
+                <div class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
                 </div>
+                <div class="nav-item">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Hoy</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-compass"></i>
+                    <span>Explorar</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notificaciones</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Mensajes</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Configuración</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Ayuda</span>
+                </div>
+            </div>
+        </aside>
 
-                <div class="pin-author" id="author-info">
-                    <img id="author-avatar" src="https://i.pravatar.cc/100?img=12">
-                    <div class="author-data">
-                        <strong id="author-name"></strong>
-                        <span id="author-followers"></span>
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="main-content">
+            
+            <!-- HEADER SUPERIOR -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="back-button" id="backButton">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-comment-dots"></i>
+                    <div class="profile-icon">
+                        <img src="https://i.pravatar.cc/100?img=12" alt="Perfil">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENEDOR DEL PIN -->
+            <div class="pin-container">
+                
+                <!-- CARTA PRINCIPAL -->
+                <div class="pin-main-card">
+                    
+                    <!-- SECCIÓN DE LA IMAGEN -->
+                    <div class="pin-image-section">
+                        <img id="main-image" src="" alt="Pin">
+                        
+                        <!-- BOTONES SOBRE LA IMAGEN -->
+                        <div class="image-overlay">
+                            <button class="overlay-btn expand-btn" id="expandBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="overlay-btn like-btn" id="likeBtn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="overlay-btn share-btn">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- CONTADOR DE LIKES -->
+                        <div class="likes-count" id="likesCount">
+                            <i class="fas fa-heart"></i>
+                            <span id="likesNumber">0</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN DE INFORMACIÓN -->
+                    <div class="pin-info-section">
+                        
+                        <!-- BOTONES DE ACCIÓN -->
+                        <div class="pin-actions-top">
+                            <button class="action-btn save-btn" id="savePinBtn">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                            <button class="action-btn more-btn">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </div>
+
+                        <!-- INFORMACIÓN DEL AUTOR -->
+                        <div class="author-section">
+                            <div class="author-avatar">
+                                <img id="author-avatar" src="">
+                            </div>
+                            <div class="author-details">
+                                <strong id="author-name"></strong>
+                                <span id="author-followers"></span>
+                            </div>
+                            <button class="follow-btn" id="followBtn">Seguir</button>
+                        </div>
+
+                        <!-- TÍTULO Y DESCRIPCIÓN -->
+                        <h1 id="pin-title"></h1>
+                        <p id="pin-description" class="pin-description"></p>
+
+                        <!-- SECCIÓN DE COMENTARIOS -->
+                        <div class="comments-wrapper">
+                            <div class="comments-header">
+                                <h3 id="comments-count">0 comentarios</h3>
+                            </div>
+
+                            <div id="comments-list" class="comments-list">
+                                <!-- Comentarios dinámicos -->
+                            </div>
+
+                            <!-- INPUT PARA NUEVO COMENTARIO -->
+                            <div class="comment-input-wrapper">
+                                <div class="comment-avatar-small">
+                                    <img src="https://i.pravatar.cc/100?img=99" alt="Tu avatar">
+                                </div>
+                                <div class="comment-input-field">
+                                    <input type="text" id="comment-input" placeholder="Añade un comentario...">
+                                    <button id="submitCommentBtn" class="send-comment-btn">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <h2 id="pin-title"></h2>
-                <p id="pin-description" class="pin-description"></p>
-
-                <div class="mini-gallery" id="mini-gallery">
-                    <!-- Las imágenes relacionadas se cargarán aquí -->
-                </div>
-
-                <div class="comments-header">
-                    <h3 id="comments-count">0 comentarios</h3>
-                </div>
-
-                <div class="comments-section" id="comments-section">
-                    <!-- Los comentarios se cargarán aquí -->
-                </div>
-
-                <div class="comment-box-input">
-                    <input type="text" id="comment-input" placeholder="Añade un comentario">
-                    <button id="submit-comment" class="btn-submit">Publicar</button>
+                <!-- SECCIÓN DE MÁS IDEAS -->
+                <div class="more-ideas-section">
+                    <h3>Más ideas para ti</h3>
+                    <div class="related-pins-grid" id="relatedPinsGrid">
+                        <!-- Pins relacionados -->
+                    </div>
                 </div>
 
             </div>
-
-            <!-- Recomendados -->
-            <div class="related-pins" id="related-pins">
-                <!-- Los pins relacionados se cargarán aquí -->
-            </div>
-
         </div>
+    </div>
 
+    <!-- MODAL PARA AMPLIAR IMAGEN -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img id="modalImage" src="">
+        </div>
     </div>
 
     <script>
         $(document).ready(function () {
-
-            // Obtener la URL de la imagen de los parámetros
             const params = new URLSearchParams(window.location.search);
             const imageUrl = params.get('image');
             let currentPost = null;
             let allPosts = [];
+            let isLiked = false;
+            let likesCount = 0;
 
-            // Función para obtener todos los posts del backend
+            // ========== FUNCIONES DE LA API ==========
+            
             async function fetchAllPosts() {
                 try {
                     const response = await fetch('http://localhost:8000/posts');
@@ -91,258 +202,448 @@
                     return allPosts;
                 } catch (error) {
                     console.error('Error cargando posts:', error);
-                    return [];
+                    // Datos de respaldo si la API no está disponible
+                    allPosts = [
+                        { id: 1, url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600", titulo: "Inspiración Creativa", categoria: "Arte", autor_nombre: "Artista Digital", descripcion: "Una obra llena de creatividad" },
+                        { id: 2, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600", titulo: "Paisajes", categoria: "Naturaleza", autor_nombre: "Viajero", descripcion: "Hermosos paisajes" }
+                    ];
+                    return allPosts;
                 }
             }
 
-            // Función para obtener el post actual por URL
             function getCurrentPost() {
                 if (!imageUrl) return null;
                 return allPosts.find(post => post.url === imageUrl);
             }
 
-            // Función para obtener posts de la misma categoría
-            function getRelatedPosts(currentPost, limit = 4) {
+            function getRelatedPosts(currentPost, limit = 8) {
                 if (!currentPost) return [];
-
-                // Filtrar posts de la misma categoría, excluyendo el actual
                 const sameCategory = allPosts.filter(post =>
                     post.categoria === currentPost.categoria && post.url !== currentPost.url
                 );
-
-                // Si no hay suficientes de la misma categoría, completar con otros posts
                 if (sameCategory.length < limit) {
                     const otherPosts = allPosts.filter(post =>
                         post.categoria !== currentPost.categoria && post.url !== currentPost.url
                     );
                     return [...sameCategory, ...otherPosts].slice(0, limit);
                 }
-
                 return sameCategory.slice(0, limit);
             }
 
-            // Función para cargar comentarios desde localStorage
+            // ========== FUNCIONES DE LIKES (CON NÚMEROS ALEATORIOS Y DINÁMICOS) ==========
+            
+            function loadLikes(postId) {
+                const likesKey = `likes_${postId}`;
+                const savedLikes = localStorage.getItem(likesKey);
+                if (savedLikes) {
+                    const data = JSON.parse(savedLikes);
+                    likesCount = data.count;
+                    isLiked = data.liked || false;
+                } else {
+                    // NÚMERO ALEATORIO PARA CADA IMAGEN (entre 50 y 550)
+                    likesCount = Math.floor(Math.random() * 500) + 50;
+                    isLiked = false;
+                }
+                updateLikesUI();
+            }
+
+            function saveLikes(postId) {
+                const likesKey = `likes_${postId}`;
+                localStorage.setItem(likesKey, JSON.stringify({
+                    count: likesCount,
+                    liked: isLiked
+                }));
+            }
+
+            function updateLikesUI() {
+                $('#likesNumber').text(likesCount.toLocaleString());
+                const likeIcon = $('#likeBtn i');
+                if (isLiked) {
+                    likeIcon.removeClass('far').addClass('fas');
+                    likeIcon.css('color', '#e60023');
+                } else {
+                    likeIcon.removeClass('fas').addClass('far');
+                    likeIcon.css('color', 'white');
+                }
+            }
+
+            function toggleLike() {
+                const postId = currentPost.id || currentPost.url;
+                if (isLiked) {
+                    likesCount--;  // RESTA 1 SI QUITA EL LIKE
+                    isLiked = false;
+                } else {
+                    likesCount++;  // SUMA 1 SI DA LIKE
+                    isLiked = true;
+                }
+                updateLikesUI();
+                saveLikes(postId);
+                
+                // Animación del corazón
+                const likeBtn = $('#likeBtn');
+                likeBtn.addClass('like-animation');
+                setTimeout(() => {
+                    likeBtn.removeClass('like-animation');
+                }, 300);
+            }
+
+            // ========== FUNCIONES DE COMENTARIOS ==========
+            
             function loadComments(postId) {
                 const commentsKey = `comments_${postId}`;
                 const savedComments = localStorage.getItem(commentsKey);
                 return savedComments ? JSON.parse(savedComments) : [];
             }
 
-            // Función para guardar comentarios en localStorage
             function saveComments(postId, comments) {
                 const commentsKey = `comments_${postId}`;
                 localStorage.setItem(commentsKey, JSON.stringify(comments));
             }
 
-            // Función para renderizar comentarios
             function renderComments(comments) {
-                const commentsSection = $('#comments-section');
+                const commentsList = $('#comments-list');
                 const commentsCount = $('#comments-count');
 
                 if (comments.length === 0) {
-                    commentsSection.html('<div class="no-comments">No hay comentarios aún. ¡Sé el primero en comentar!</div>');
+                    commentsList.html(`
+                        <div class="no-comments">
+                            <i class="far fa-comment-dots"></i>
+                            <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+                        </div>
+                    `);
                     commentsCount.text('0 comentarios');
                     return;
                 }
 
                 commentsCount.text(`${comments.length} ${comments.length === 1 ? 'comentario' : 'comentarios'}`);
+                commentsList.empty();
 
-                commentsSection.empty();
-                comments.forEach(comment => {
-                    const commentDiv = $('<div>').addClass('comment');
-                    const avatar = $('<div>').addClass('comment-avatar').text(comment.nombre.charAt(0).toUpperCase());
-                    const commentContent = $('<div>').addClass('comment-content');
-                    const strong = $('<strong>').text(comment.nombre);
-                    const text = $('<span>').text(` ${comment.texto}`);
-                    const date = $('<div>').addClass('comment-date').text(new Date(comment.fecha).toLocaleDateString());
-
-                    commentContent.append(strong);
-                    commentContent.append(text);
-                    commentContent.append(date);
-                    commentDiv.append(avatar);
-                    commentDiv.append(commentContent);
-                    commentsSection.append(commentDiv);
+                comments.slice().reverse().forEach(comment => {
+                    const commentHtml = `
+                        <div class="comment-item">
+                            <div class="comment-avatar-img">
+                                <img src="https://i.pravatar.cc/100?img=${comment.nombre.length}" alt="${comment.nombre}">
+                            </div>
+                            <div class="comment-content-detail">
+                                <div class="comment-header-detail">
+                                    <strong>${escapeHtml(comment.nombre)}</strong>
+                                    <span class="comment-time">${formatDate(comment.fecha)}</span>
+                                </div>
+                                <p>${escapeHtml(comment.texto)}</p>
+                            </div>
+                        </div>
+                    `;
+                    commentsList.append(commentHtml);
                 });
             }
 
-            // Función para agregar un comentario
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diff = now - date;
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(diff / 3600000);
+                const days = Math.floor(diff / 86400000);
+
+                if (minutes < 1) return 'Justo ahora';
+                if (minutes < 60) return `Hace ${minutes} min`;
+                if (hours < 24) return `Hace ${hours} h`;
+                if (days < 7) return `Hace ${days} d`;
+                return date.toLocaleDateString();
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
             function addComment(commentText, nombre) {
                 if (!commentText.trim()) return false;
-
                 const postId = currentPost.id || currentPost.url;
                 const comments = loadComments(postId);
-
                 const newComment = {
                     id: Date.now(),
                     nombre: nombre,
                     texto: commentText.trim(),
                     fecha: new Date().toISOString()
                 };
-
                 comments.push(newComment);
                 saveComments(postId, comments);
                 renderComments(comments);
                 return true;
             }
 
-            // Función para renderizar mini galería (imágenes relacionadas)
-            function renderMiniGallery(relatedPosts) {
-                const miniGallery = $('#mini-gallery');
-                miniGallery.empty();
-
-                if (relatedPosts.length === 0) {
-                    miniGallery.html('<p class="no-related">No hay imágenes relacionadas</p>');
-                    return;
-                }
-
-                relatedPosts.slice(0, 3).forEach(post => {
-                    const img = $('<img>')
-                        .attr('src', post.url)
-                        .attr('alt', post.titulo)
-                        .attr('title', post.titulo)
-                        .on('click', function () {
-                            window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
-                        });
-                    miniGallery.append(img);
-                });
-            }
-
-            // Función para renderizar pins relacionados
+            // ========== RENDERIZAR PINS RELACIONADOS ==========
+            
             function renderRelatedPins(relatedPosts) {
-                const relatedPinsSection = $('#related-pins');
-                relatedPinsSection.empty();
+                const container = $('#relatedPinsGrid');
+                container.empty();
 
                 if (relatedPosts.length === 0) {
-                    relatedPinsSection.html('<p class="no-related">No hay pins relacionados</p>');
+                    container.html('<p class="no-related">No hay pins relacionados</p>');
                     return;
                 }
 
                 relatedPosts.forEach(post => {
-                    const relatedCard = $('<div>').addClass('related-card');
-                    const img = $('<img>')
-                        .attr('src', post.url)
-                        .attr('alt', post.titulo)
-                        .on('click', function () {
-                            window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
-                        });
-                    const p = $('<p>').text(post.titulo);
-
-                    relatedCard.append(img);
-                    relatedCard.append(p);
-                    relatedPinsSection.append(relatedCard);
+                    const card = `
+                        <div class="related-pin" onclick="window.location.href='detalle.html?image=${encodeURIComponent(post.url)}'">
+                            <img src="${post.url}" alt="${post.titulo}">
+                            <div class="related-pin-overlay">
+                                <p>${escapeHtml(post.titulo)}</p>
+                                <span>${post.categoria || 'Inspiración'}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.append(card);
                 });
             }
 
-            // Función para formatear número de seguidores
+            // ========== FUNCIONES DE SEGUIDORES ==========
+            
+            function loadFollowStatus(authorName) {
+                const followKey = `follow_${authorName}`;
+                return localStorage.getItem(followKey) === 'true';
+            }
+
+            function saveFollowStatus(authorName, isFollowing) {
+                const followKey = `follow_${authorName}`;
+                localStorage.setItem(followKey, isFollowing);
+            }
+
+            function updateFollowButton() {
+                const authorName = currentPost?.autor_nombre || "Usuario Anónimo";
+                const isFollowing = loadFollowStatus(authorName);
+                const followBtn = $('#followBtn');
+                
+                if (isFollowing) {
+                    followBtn.text('Siguiendo');
+                    followBtn.css('background', '#efefef');
+                    followBtn.css('color', '#111');
+                } else {
+                    followBtn.text('Seguir');
+                    followBtn.css('background', '#e60023');
+                    followBtn.css('color', 'white');
+                }
+            }
+
+            // ========== FUNCIONES DE GUARDADO ==========
+            
+            function loadSavedStatus(postId) {
+                const savedKey = `saved_${postId}`;
+                return localStorage.getItem(savedKey) === 'true';
+            }
+
+            function savePinStatus(postId, isSaved) {
+                const savedKey = `saved_${postId}`;
+                localStorage.setItem(savedKey, isSaved);
+            }
+
+            function updateSaveButton() {
+                const postId = currentPost.id || currentPost.url;
+                const isSaved = loadSavedStatus(postId);
+                const saveBtn = $('#savePinBtn');
+                
+                if (isSaved) {
+                    saveBtn.html('<i class="fas fa-check"></i> Guardado');
+                    saveBtn.css('background', '#111');
+                } else {
+                    saveBtn.html('<i class="fas fa-save"></i> Guardar');
+                    saveBtn.css('background', '#e60023');
+                }
+            }
+
+            // ========== FUNCIONES PRINCIPALES ==========
+            
             function formatFollowers(count) {
                 if (!count) return "0 seguidores";
-                if (count >= 1000) {
-                    return (count / 1000).toFixed(1) + 'k seguidores';
-                }
+                if (count >= 1000) return (count / 1000).toFixed(1) + 'k seguidores';
                 return count + ' seguidores';
             }
 
-            // Función principal para cargar la página
             async function loadPage() {
                 await fetchAllPosts();
-
                 currentPost = getCurrentPost();
 
                 if (currentPost) {
-                    // Cargar imagen principal y título
                     $("#main-image").attr("src", currentPost.url);
+                    $("#modalImage").attr("src", currentPost.url);
                     $("#pin-title").text(currentPost.titulo);
-
-                    // Cargar descripción si existe
+                    
                     if (currentPost.descripcion) {
                         $("#pin-description").text(currentPost.descripcion).show();
                     } else {
                         $("#pin-description").hide();
                     }
 
-                    // Cargar información del autor desde el post
                     const autorNombre = currentPost.autor_nombre || "Usuario Anónimo";
                     $("#author-name").text(autorNombre);
-
-                    // Generar número aleatorio de seguidores para demostración
-                    const followersCount = Math.floor(Math.random() * 10000);
+                    
+                    const followersCount = currentPost.seguidores || Math.floor(Math.random() * 10000);
                     $("#author-followers").text(formatFollowers(followersCount));
-
-                    // Cambiar avatar según el autor
+                    
                     const avatarNum = autorNombre.length % 70;
                     $("#author-avatar").attr("src", `https://i.pravatar.cc/100?img=${avatarNum}`);
 
-                    // Obtener posts de la misma categoría
                     const relatedPosts = getRelatedPosts(currentPost);
-
-                    // Renderizar mini galería y pins relacionados
-                    renderMiniGallery(relatedPosts);
                     renderRelatedPins(relatedPosts);
 
-                    // Cargar comentarios guardados
-                    const postId = currentPost.id;
-                    const savedComments = loadComments(postId);
+                    const savedComments = loadComments(currentPost.id);
                     renderComments(savedComments);
-
-                } else if (imageUrl) {
-                    // Si no se encuentra el post pero tenemos la URL
-                    $("#main-image").attr("src", imageUrl);
-                    $("#pin-title").text("Sin título");
-                    $("#pin-description").hide();
-                    $("#author-name").text("Usuario Anónimo");
-                    $("#author-followers").text("0 seguidores");
-
-                    // Mostrar todos los posts como relacionados
-                    const relatedPosts = allPosts.filter(post => post.url !== imageUrl).slice(0, 4);
-                    renderRelatedPins(relatedPosts);
-                    renderMiniGallery(relatedPosts.slice(0, 3));
-
-                    // Cargar comentarios por URL
-                    const comments = loadComments(imageUrl);
-                    renderComments(comments);
-                    currentPost = { id: imageUrl, url: imageUrl, autor_nombre: "Usuario Anónimo" };
-
-                } else {
-                    // Imagen por defecto
-                    $("#main-image").attr("src", "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=900");
-                    $("#pin-title").text("Bienvenido a Pinterest");
-                    $("#pin-description").text("Explora ideas increíbles y encuentra inspiración").show();
-                    $("#author-name").text("Pinterest Team");
-                    $("#author-followers").text("1M seguidores");
-
-                    const defaultRelated = allPosts.slice(0, 4);
-                    renderRelatedPins(defaultRelated);
-                    renderMiniGallery(defaultRelated.slice(0, 3));
-
-                    currentPost = { id: 'default', url: 'default', autor_nombre: "Pinterest Team" };
+                    
+                    // CARGAR LIKES (con número aleatorio para cada imagen)
+                    loadLikes(currentPost.id);
+                    updateFollowButton();
+                    updateSaveButton();
                 }
             }
 
-            // Evento para agregar comentarios
-            $('#submit-comment').on('click', function () {
+            // ========== EVENTOS ==========
+            
+            $('#backButton').on('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            $('#likeBtn').on('click', toggleLike);
+            
+            $('#followBtn').on('click', function() {
+                const authorName = currentPost?.autor_nombre || "Usuario Anónimo";
+                const isCurrentlyFollowing = loadFollowStatus(authorName);
+                saveFollowStatus(authorName, !isCurrentlyFollowing);
+                updateFollowButton();
+            });
+            
+            $('#savePinBtn').on('click', function() {
+                const postId = currentPost.id || currentPost.url;
+                const isCurrentlySaved = loadSavedStatus(postId);
+                savePinStatus(postId, !isCurrentlySaved);
+                updateSaveButton();
+            });
+            
+            $('#submitCommentBtn').on('click', function() {
                 const commentText = $('#comment-input').val();
                 const nombre = currentPost?.autor_nombre || "Usuario Anónimo";
-
                 if (commentText.trim()) {
-                    const success = addComment(commentText, nombre);
-                    if (success) {
-                        $('#comment-input').val('');
-                    }
+                    addComment(commentText, nombre);
+                    $('#comment-input').val('');
                 }
             });
-
-            // Permitir enviar comentario con Enter
-            $('#comment-input').on('keypress', function (e) {
+            
+            $('#comment-input').on('keypress', function(e) {
                 if (e.which === 13) {
-                    $('#submit-comment').click();
+                    $('#submitCommentBtn').click();
+                }
+            });
+            
+            // Modal para ampliar imagen
+            const modal = $('#imageModal');
+            const expandBtn = $('#expandBtn');
+            const closeBtn = $('.close-modal');
+            
+            expandBtn.on('click', function() {
+                modal.css('display', 'flex');
+            });
+            
+            closeBtn.on('click', function() {
+                modal.css('display', 'none');
+            });
+            
+            $(window).on('click', function(e) {
+                if ($(e.target).is(modal)) {
+                    modal.css('display', 'none');
                 }
             });
 
-            // Cargar la página
             loadPage();
-
         });
     </script>
+
+    <style>
+        /* ANIMACIÓN PARA EL CORAZÓN AL DAR LIKE */
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .like-animation {
+            animation: likeAnimation 0.3s ease !important;
+        }
+        
+        /* ESTILOS ADICIONALES QUE PODRÍAN FALTAR EN TU CSS */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 240px;
+            background: white;
+            border-right: 1px solid #e2e2e2;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            z-index: 100;
+        }
+        
+        .sidebar-logo {
+            font-size: 32px;
+            color: #e60023;
+            margin-bottom: 40px;
+            padding-left: 12px;
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .nav-item.active {
+            background: #f5f5f5;
+            font-weight: 500;
+        }
+        
+        .nav-item i {
+            width: 24px;
+            font-size: 20px;
+        }
+        
+        .sidebar-footer {
+            border-top: 1px solid #e2e2e2;
+            padding-top: 16px;
+            margin-top: auto;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+        }
+        
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
 
 </body>
 

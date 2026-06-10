@@ -3,58 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publify</title>
+    <title>Publify | Inspiración visual</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link rel="icon" href="/imagenes/pinterest-badge-logo-png_seeklogo-157893.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 
     <nav class="sidebar">
         <div class="logo-container">
-            <img src="/imagenes/pinterest-badge-logo-png_seeklogo-157893.png" alt="Pinterest Logo" class="logo-img">
+            <i class="fab fa-pinterest"></i>
+            <span class="logo-text">Publify</span>
         </div>
         
         <div class="nav-icons">
-            <img src="/imagenes/images.png" class="icon" alt="Inicio">
-            <img src="/imagenes/images2.png" class="icon" alt="Explorar">
-            <img src="/imagenes/collage.png" class="icon" alt="Tableros">
-            <img src="/imagenes/filled-plus-2-math.png" class="icon" alt="Crear">
-            <img src="/imagenes/552872.png" class="icon" alt="Notificaciones">
-            <img src="/imagenes/151801.png" class="icon" alt="Mensajes">
+            <div class="nav-item active"><i class="fas fa-home"></i><span>Inicio</span></div>
+            <div class="nav-item"><i class="fas fa-compass"></i><span>Explorar</span></div>
+            <div class="nav-item"><i class="fas fa-plus-circle"></i><span>Crear</span></div>
+            <div class="nav-item"><i class="fas fa-bell"></i><span>Notificaciones</span></div>
+            <div class="nav-item"><i class="fas fa-envelope"></i><span>Mensajes</span></div>
         </div>
 
         <div class="settings-container">
-            <img src="/imagenes/657089.png" class="icon" alt="Ajustes">
+            <div class="nav-item"><i class="fas fa-cog"></i><span>Ajustes</span></div>
         </div>
     </nav>
 
     <div class="main-wrapper">
         <header>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
             <div class="search-container">
-                <img src="/imagenes/search.png" class="search-icon" alt="search">
+                <i class="fas fa-search"></i>
                 <input type="text" id="main-search" placeholder="Buscar">
-                <img src="/imagenes/camera.png" class="camera-icon" alt="camera">
+                <i class="fas fa-camera"></i>
             </div>
             <div class="profile-icon">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="#333"><circle cx="12" cy="12" r="10"/></svg>
+                <img src="https://i.pravatar.cc/100?img=12" alt="Perfil">
             </div>
         </header>
 
+        <!-- Barra de categorías -->
+        <div class="categories-bar">
+            <button class="category-btn active" data-categoria="todos">Para ti</button>
+            <button class="category-btn" data-categoria="Arte">Arte</button>
+            <button class="category-btn" data-categoria="Naturaleza">Naturaleza</button>
+            <button class="category-btn" data-categoria="Paisajes">Paisajes</button>
+            <button class="category-btn" data-categoria="Animales">Animales</button>
+            <button class="category-btn" data-categoria="Viajes">Viajes</button>
+            <button class="category-btn" data-categoria="Anime">anime</button>
+        </div>
+
         <main id="pinterest-container" class="masonry-grid"></main>
+
+        <div class="loader" id="loader" style="display: none;">
+            <div class="spinner"></div>
+            <p>Cargando más ideas...</p>
+        </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Efecto jQuery para el buscador
-            $('#main-search').on('focus', function() {
-                $('.search-container').css('background-color', '#e0e0e0');
-            }).on('blur', function() {
-                $('.search-container').css('background-color', '#efefef');
+            let allPosts = [];
+            let displayedPosts = [];
+            let currentCategory = 'todos';
+            let isLoading = false;
+            let currentPage = 0;
+            const POSTS_PER_PAGE = 12;
+
+            // ========== OBTENER POSTS DE LA API ==========
+            async function fetchPosts() {
+                try {
+                    const response = await fetch('http://localhost:8000/posts');
+                    allPosts = await response.json();
+                    
+                    // Agregar datos adicionales si faltan
+                    allPosts = allPosts.map(post => ({
+                        ...post,
+                        autor_nombre: post.autor_nombre || "Usuario Anónimo",
+                        categoria: post.categoria || "Inspiración",
+                        likes: Math.floor(Math.random() * 500) + 10
+                    }));
+                    
+                    filterAndDisplayPosts();
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Datos de respaldo
+                    allPosts = [
+                        { id: 1, url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600", titulo: "Inspiración Creativa", categoria: "Arte", autor_nombre: "Artista", likes: 234 },
+                        { id: 2, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600", titulo: "Montañas Mágicas", categoria: "Paisajes", autor_nombre: "Viajero", likes: 567 },
+                        { id: 3, url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600", titulo: "Valle Escondido", categoria: "Naturaleza", autor_nombre: "Explorador", likes: 892 },
+                        { id: 4, url: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600", titulo: "Zorro Curioso", categoria: "Animales", autor_nombre: "Wildlife", likes: 445 },
+                        { id: 5, url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600", titulo: "Playa Caribeña", categoria: "Viajes", autor_nombre: "Tropical", likes: 1234 }
+                    ];
+                    filterAndDisplayPosts();
+                }
+            }
+
+            // ========== FILTRAR POSTS ==========
+            function filterAndDisplayPosts() {
+                let filtered = [...allPosts];
+                
+                // Filtrar por categoría
+                if (currentCategory !== 'todos') {
+                    filtered = filtered.filter(post => post.categoria === currentCategory);
+                }
+                
+                // Filtrar por búsqueda
+                const searchTerm = $('#main-search').val().toLowerCase();
+                if (searchTerm) {
+                    filtered = filtered.filter(post => 
+                        post.titulo.toLowerCase().includes(searchTerm) ||
+                        post.autor_nombre.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                displayedPosts = filtered;
+                currentPage = 0;
+                $('#pinterest-container').empty();
+                loadMorePosts();
+            }
+
+            // ========== CARGAR MÁS POSTS (INFINITE SCROLL) ==========
+            function loadMorePosts() {
+                if (isLoading) return;
+                isLoading = true;
+                $('#loader').show();
+                
+                setTimeout(() => {
+                    const start = currentPage * POSTS_PER_PAGE;
+                    const end = start + POSTS_PER_PAGE;
+                    const postsToLoad = displayedPosts.slice(start, end);
+                    
+                    postsToLoad.forEach(post => renderPostCard(post));
+                    
+                    currentPage++;
+                    isLoading = false;
+                    $('#loader').hide();
+                }, 200);
+            }
+
+            // ========== RENDERIZAR TARJETA (CON REDIRECCIÓN FUNCIONAL) ==========
+            function renderPostCard(post) {
+                const card = $('<div>').addClass('post-card');
+                
+                // Verificar si está guardado
+                const isSaved = localStorage.getItem(`saved_${post.id}`) === 'true';
+                
+                // Verificar likes
+                let likesCount = post.likes;
+                let isLiked = false;
+                const savedLikes = localStorage.getItem(`likes_${post.id}`);
+                if (savedLikes) {
+                    const data = JSON.parse(savedLikes);
+                    likesCount = data.count;
+                    isLiked = data.liked;
+                }
+                
+                const cardHtml = `
+                    <div class="post-image-wrapper">
+                        <img src="${post.url}" alt="${post.titulo}" class="pin-img-click" loading="lazy">
+                        <div class="post-overlay">
+                            <button class="save-pin-btn ${isSaved ? 'saved' : ''}" data-id="${post.id}">
+                                <i class="${isSaved ? 'fas fa-check' : 'fas fa-save'}"></i>
+                                <span>${isSaved ? 'Guardado' : 'Guardar'}</span>
+                            </button>
+                            <button class="like-pin-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}">
+                                <i class="${isLiked ? 'fas fa-heart' : 'far fa-heart'}"></i>
+                                <span class="likes-count">${likesCount.toLocaleString()}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="post-info">
+                        <div class="post-author">
+                            <img src="https://i.pravatar.cc/100?img=${post.autor_nombre.length}" alt="${post.autor_nombre}">
+                            <span>${escapeHtml(post.autor_nombre)}</span>
+                        </div>
+                        <p class="post-title">${escapeHtml(post.titulo)}</p>
+                    </div>
+                `;
+                
+                card.html(cardHtml);
+                
+                // ========== REDIRECCIÓN A DETALLE (FUNCIONAL) ==========
+                card.find('.pin-img-click').on('click', function(e) {
+                    e.stopPropagation();
+                    window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
+                });
+                
+                // También redirige al hacer clic en el título o autor
+                card.find('.post-title, .post-author').on('click', function(e) {
+                    e.stopPropagation();
+                    window.location.href = `detalle.html?image=${encodeURIComponent(post.url)}`;
+                });
+                
+                // Botón guardar
+                card.find('.save-pin-btn').on('click', function(e) {
+                    e.stopPropagation();
+                    const btn = $(this);
+                    const postId = btn.data('id');
+                    const isCurrentlySaved = localStorage.getItem(`saved_${postId}`) === 'true';
+                    
+                    if (isCurrentlySaved) {
+                        localStorage.removeItem(`saved_${postId}`);
+                        btn.removeClass('saved');
+                        btn.html('<i class="fas fa-save"></i><span>Guardar</span>');
+                    } else {
+                        localStorage.setItem(`saved_${postId}`, 'true');
+                        btn.addClass('saved');
+                        btn.html('<i class="fas fa-check"></i><span>Guardado</span>');
+                    }
+                });
+                
+                // Botón like
+                card.find('.like-pin-btn').on('click', function(e) {
+                    e.stopPropagation();
+                    const btn = $(this);
+                    const postId = btn.data('id');
+                    const likesKey = `likes_${postId}`;
+                    const savedLikes = localStorage.getItem(likesKey);
+                    let currentLikes, currentLiked;
+                    
+                    if (savedLikes) {
+                        const data = JSON.parse(savedLikes);
+                        currentLikes = data.count;
+                        currentLiked = data.liked;
+                    } else {
+                        currentLikes = post.likes;
+                        currentLiked = false;
+                    }
+                    
+                    if (currentLiked) {
+                        currentLikes--;
+                        currentLiked = false;
+                        btn.removeClass('liked');
+                        btn.find('i').removeClass('fas').addClass('far');
+                    } else {
+                        currentLikes++;
+                        currentLiked = true;
+                        btn.addClass('liked');
+                        btn.find('i').removeClass('far').addClass('fas');
+                    }
+                    
+                    localStorage.setItem(likesKey, JSON.stringify({ count: currentLikes, liked: currentLiked }));
+                    btn.find('.likes-count').text(currentLikes.toLocaleString());
+                });
+                
+                $('#pinterest-container').append(card);
+            }
+
+            // ========== EVENTOS ==========
+            $('#main-search').on('input', function() {
+                filterAndDisplayPosts();
             });
+            
+            $('.category-btn').on('click', function() {
+                $('.category-btn').removeClass('active');
+                $(this).addClass('active');
+                currentCategory = $(this).data('categoria');
+                filterAndDisplayPosts();
+            });
+            
+            $(window).on('scroll', function() {
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 300) {
+                    if (!isLoading && displayedPosts.length > currentPage * POSTS_PER_PAGE) {
+                        loadMorePosts();
+                    }
+                }
+            });
+            
+            $('#menuToggle').on('click', function() {
+                $('.sidebar').toggleClass('mobile-open');
+            });
+
+            // ========== UTILIDADES ==========
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Iniciar
+            fetchPosts();
         });
     </script>
-    
-    <script src="/scripts.js"></script>
+
 </body>
 </html>

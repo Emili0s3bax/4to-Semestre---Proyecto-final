@@ -1,10 +1,11 @@
 :root {
     --pinterest-red: #e60023;
     --pinterest-red-hover: #ad081b;
-    --gray-light: #efefef;
-    --gray-hover: #e2e2e2;
+    --gray-bg: #f5f5f5;
+    --gray-border: #e2e2e2;
     --text-dark: #111111;
-    --text-muted: #767676;
+    --text-gray: #767676;
+    --sidebar-width: 240px;
 }
 
 * {
@@ -14,351 +15,629 @@
 }
 
 body {
-    background: #f1f1f1;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Botón de volver */
-.back-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-    background: white;
-    border: none;
-    border-radius: 50px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.back-button:hover {
-    background: #f0f0f0;
-    transform: translateX(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* CONTENEDOR GENERAL */
-.pin-detail-container {
-    width: 100%;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-/* GRID PRINCIPAL */
-.pin-detail-card {
-    width: 100%;
-    max-width: 1400px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: minmax(320px, 1.8fr) minmax(300px, 1fr) minmax(250px, .9fr);
-    gap: 20px;
-}
-
-/* IMAGEN PRINCIPAL */
-.pin-detail-image {
-    background: white;
-    border-radius: 24px;
-    overflow: hidden;
-    min-height: 500px;
-}
-
-.pin-detail-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* INFORMACIÓN */
-.pin-detail-info {
-    background: white;
-    border-radius: 24px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    min-height: 500px;
-}
-
-.pin-detail-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.btn-icon {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: var(--gray-light);
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.btn-icon:hover {
-    background: var(--gray-hover);
-}
-
-.btn-save {
-    background: var(--pinterest-red);
-    color: white;
-    border: none;
-    border-radius: 24px;
-    padding: 0 24px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.btn-save:hover {
-    background: var(--pinterest-red-hover);
-}
-
-/* Botón de publicar comentario */
-.btn-submit {
-    background: var(--pinterest-red);
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-weight: 500;
-    margin-left: 10px;
-    transition: background 0.3s ease;
-}
-
-.btn-submit:hover {
-    background: var(--pinterest-red-hover);
-}
-
-.pin-author {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.pin-author img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.author-data {
-    display: flex;
-    flex-direction: column;
-}
-
-.author-data span {
-    font-size: 13px;
-    color: var(--text-muted);
-}
-
-.pin-detail-info h2 {
-    font-size: 36px;
-    margin-bottom: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: white;
     color: var(--text-dark);
 }
 
-.pin-description {
-    color: #666;
-    font-size: 14px;
-    margin: 10px 0;
-    line-height: 1.5;
-}
-
-/* MINI GALERÍA */
-.mini-gallery {
+/* ========== APP CONTAINER CON SIDEBAR ========== */
+.app-container {
     display: flex;
-    gap: 10px;
-    margin: 15px 0;
-    overflow-x: auto;
+    min-height: 100vh;
 }
 
-.mini-gallery img {
-    width: 80px;
-    height: 80px;
-    border-radius: 12px;
-    object-fit: cover;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+/* ========== BARRA LATERAL IZQUIERDA ========== */
+.sidebar {
+    width: var(--sidebar-width);
+    background: white;
+    border-right: 1px solid var(--gray-border);
+    position: fixed;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    z-index: 100;
 }
 
-.mini-gallery img:hover {
-    transform: scale(1.05);
+.sidebar-logo {
+    font-size: 32px;
+    color: var(--pinterest-red);
+    margin-bottom: 40px;
+    padding-left: 12px;
 }
 
-/* COMENTARIOS */
-.comments-header {
-    margin-bottom: 15px;
-}
-
-.comments-section {
+.sidebar-nav {
     flex: 1;
-    overflow-y: auto;
-    max-height: 300px;
 }
 
-.comment {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 12px;
-    background: #f8f8f8;
-}
-
-.comment-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--pinterest-red);
-    color: white;
+.nav-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    flex-shrink: 0;
-}
-
-.comment-content {
-    flex: 1;
-}
-
-.comment strong {
-    display: block;
+    gap: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
     margin-bottom: 4px;
 }
 
-.comment-date {
+.nav-item:hover {
+    background: var(--gray-bg);
+}
+
+.nav-item.active {
+    background: var(--gray-bg);
+    font-weight: 500;
+}
+
+.nav-item i {
+    width: 24px;
+    font-size: 20px;
+    color: var(--text-dark);
+}
+
+.nav-item span {
+    font-size: 15px;
+}
+
+.sidebar-footer {
+    border-top: 1px solid var(--gray-border);
+    padding-top: 16px;
+    margin-top: auto;
+}
+
+/* ========== CONTENIDO PRINCIPAL ========== */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+}
+
+/* ========== HEADER ========== */
+.header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 99;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-border);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.back-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gray-bg);
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+}
+
+.back-button:hover {
+    background: var(--gray-border);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--gray-bg);
+    border-radius: 40px;
+    padding: 10px 16px;
+    width: 400px;
+    gap: 12px;
+}
+
+.search-bar i {
+    color: var(--text-gray);
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-right i {
+    font-size: 22px;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.profile-icon img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ========== CONTENEDOR DEL PIN ========== */
+.pin-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+/* ========== CARTA PRINCIPAL ========== */
+.pin-main-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    background: white;
+    border-radius: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* ========== SECCIÓN IMAGEN CON OVERLAY ========== */
+.pin-image-section {
+    position: relative;
+    background: var(--gray-bg);
+    min-height: 550px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pin-image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pin-image-section:hover .image-overlay {
+    opacity: 1;
+}
+
+.overlay-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.overlay-btn:hover {
+    transform: scale(1.05);
+    background: white;
+}
+
+.likes-count {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.likes-count i {
+    font-size: 14px;
+}
+
+/* ========== SECCIÓN INFORMACIÓN ========== */
+.pin-info-section {
+    padding: 32px 32px 32px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.pin-actions-top {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 40px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.save-btn {
+    background: var(--pinterest-red);
+    color: white;
+}
+
+.save-btn:hover {
+    background: var(--pinterest-red-hover);
+}
+
+.more-btn {
+    background: var(--gray-bg);
+    width: 40px;
+    padding: 10px;
+}
+
+/* ========== AUTOR ========== */
+.author-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-border);
+}
+
+.author-avatar img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-details {
+    flex: 1;
+}
+
+.author-details strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.author-details span {
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+.follow-btn {
+    background: var(--pinterest-red);
+    color: white;
+    border: none;
+    border-radius: 40px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.follow-btn:hover {
+    background: var(--pinterest-red-hover);
+}
+
+/* ========== TÍTULO ========== */
+.pin-info-section h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.pin-description {
+    color: var(--text-gray);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+/* ========== COMENTARIOS ========== */
+.comments-wrapper {
+    flex: 1;
+    margin-top: 16px;
+}
+
+.comments-header {
+    margin-bottom: 20px;
+}
+
+.comments-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.comments-list {
+    max-height: 320px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.comment-avatar-img img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-content-detail {
+    flex: 1;
+}
+
+.comment-header-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.comment-header-detail strong {
+    font-size: 14px;
+}
+
+.comment-time {
     font-size: 11px;
-    color: #999;
-    margin-top: 4px;
+    color: var(--text-gray);
+}
+
+.comment-content-detail p {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text-dark);
 }
 
 .no-comments {
     text-align: center;
-    color: #999;
-    padding: 20px;
-    font-style: italic;
+    padding: 40px 20px;
+    color: var(--text-gray);
 }
 
-/* INPUT COMENTARIOS */
-.comment-box-input {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.comment-box-input input {
-    flex: 1;
-    height: 48px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    background: white;
-    padding: 0 18px;
-    outline: none;
-}
-
-.comment-box-input input:focus {
-    border-color: var(--pinterest-red);
-}
-
-/* RECOMENDADOS */
-.related-pins {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.related-card {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.related-card:hover {
-    transform: translateY(-4px);
-}
-
-.related-card img {
-    width: 100%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    border-radius: 16px;
+.no-comments i {
+    font-size: 48px;
+    margin-bottom: 12px;
     display: block;
 }
 
-.related-card p {
-    margin-top: 8px;
+/* ========== INPUT COMENTARIO ========== */
+.comment-input-wrapper {
+    display: flex;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gray-border);
+}
+
+.comment-avatar-small img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-input-field {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+}
+
+.comment-input-field input {
+    flex: 1;
+    border: 1px solid var(--gray-border);
+    border-radius: 40px;
+    padding: 10px 16px;
     font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.comment-input-field input:focus {
+    border-color: var(--pinterest-red);
+}
+
+.send-comment-btn {
+    background: var(--pinterest-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.send-comment-btn:hover {
+    background: var(--pinterest-red-hover);
+}
+
+/* ========== MÁS IDEAS ========== */
+.more-ideas-section {
+    margin-top: 60px;
+}
+
+.more-ideas-section h3 {
+    font-size: 24px;
     font-weight: 600;
-    text-align: center;
+    margin-bottom: 24px;
+}
+
+.related-pins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.related-pin {
+    position: relative;
+    cursor: pointer;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.related-pin:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.related-pin img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+}
+
+.related-pin-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 12px;
+    color: white;
+}
+
+.related-pin-overlay p {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.related-pin-overlay span {
+    font-size: 12px;
+    opacity: 0.8;
 }
 
 .no-related {
     text-align: center;
-    color: #999;
-    padding: 20px;
+    color: var(--text-gray);
+    padding: 40px;
 }
 
-/* TABLET */
-@media (max-width: 1200px) {
-    .pin-detail-card {
-        grid-template-columns: 2fr 1fr;
-    }
-
-    .related-pins {
-        grid-column: 1 / -1;
-        grid-template-columns: repeat(4, 1fr);
-    }
+/* ========== MODAL PARA AMPLIAR IMAGEN ========== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
 }
 
-/* MÓVIL */
-@media (max-width: 768px) {
-    .pin-detail-container {
-        padding: 10px;
-    }
-
-    .pin-detail-card {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .pin-detail-image {
-        min-height: 350px;
-    }
-
-    .pin-detail-info {
-        min-height: auto;
-    }
-
-    .related-pins {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .pin-detail-info h2 {
-        font-size: 28px;
-    }
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
 }
 
-/* CELULAR PEQUEÑO */
-@media (max-width: 480px) {
-    .related-pins {
+.modal-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--pinterest-red);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+    .sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .pin-main-card {
         grid-template-columns: 1fr;
     }
-
-    .pin-detail-actions {
-        flex-wrap: wrap;
+    
+    .pin-info-section {
+        padding: 24px;
     }
+    
+    .search-bar {
+        width: 250px;
+    }
+    
+    .related-pins-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
 
-    .btn-save {
-        width: 100%;
-        height: 45px;
+@media (max-width: 600px) {
+    .header {
+        padding: 10px 16px;
+    }
+    
+    .search-bar {
+        display: none;
+    }
+    
+    .pin-container {
+        padding: 0 16px;
+        margin: 20px auto;
+    }
+    
+    .pin-info-section h1 {
+        font-size: 24px;
+    }
+    
+    .related-pins-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .back-button {
+        display: flex;
     }
 }
