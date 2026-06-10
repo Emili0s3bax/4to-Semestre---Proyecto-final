@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir imagen - Publify</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%);
+            min-height: 100vh;
+        }
+
+        .upload-header {
+            background: white;
+            border-bottom: 1px solid #e2e2e2;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #efefef;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e2e2e2;
+        }
+
+        .upload-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .upload-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+        }
+
+        .upload-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .upload-subtitle {
+            color: #767676;
+            margin-bottom: 32px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Área de dropzone */
+        .dropzone {
+            border: 2px dashed #e2e2e2;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 24px;
+        }
+
+        .dropzone:hover {
+            border-color: #e60023;
+            background: #fff5f5;
+        }
+
+        .dropzone.dragover {
+            border-color: #e60023;
+            background: #fff5f5;
+        }
+
+        .dropzone i {
+            font-size: 64px;
+            color: #767676;
+            margin-bottom: 16px;
+        }
+
+        .dropzone p {
+            color: #767676;
+            font-size: 14px;
+        }
+
+        .dropzone .file-name {
+            margin-top: 12px;
+            font-weight: 500;
+            color: #e60023;
+        }
+
+        .preview-image {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .preview-image img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 16px;
+            margin-top: 12px;
+        }
+
+        /* Formulario */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #111;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e2e2;
+            border-radius: 16px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #e60023;
+        }
+
+        .form-group input.error, .form-group select.error, .form-group textarea.error {
+            border-color: #e60023;
+            background: #fff5f5;
+        }
+
+        .error-message {
+            color: #e60023;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e60023;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+        .upload-btn:hover {
+            background: #ad081b;
+        }
+
+        .upload-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Alertas */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-error {
+            background: #fff5f5;
+            color: #e60023;
+            border: 1px solid #ffcdcd;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e2e2;
+            border-top-color: #e60023;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Loader de categorías */
+        .categories-loading {
+            text-align: center;
+            padding: 12px;
+            color: #767676;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="upload-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>Subir imagen</h1>
+    </div>
+
+    <div class="upload-container">
+        <div class="upload-card">
+            <h2 class="upload-title">Comparte tu inspiración</h2>
+            <p class="upload-subtitle">Sube una imagen y compártela con la comunidad</p>
+
+            <div id="alertMessage" class="alert"></div>
+
+            <form id="uploadForm" enctype="multipart/form-data">
+                <!-- Dropzone para imagen -->
+                <div class="dropzone" id="dropzone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Arrastra y suelta tu imagen aquí o haz clic para seleccionar</p>
+                    <p style="font-size: 12px; margin-top: 8px;">JPEG, PNG, GIF, WEBP (máx. 10MB)</p>
+                    <div class="file-name" id="fileName"></div>
+                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display: none;">
+                </div>
+
+                <div class="preview-image" id="previewContainer">
+                    <img id="previewImg" src="">
+                </div>
+
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="titulo" placeholder="Ej: Atardecer en la playa">
+                    <div id="tituloError" class="error-message">El título es obligatorio</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="categoria">
+                        <option value="">Cargando categorías...</option>
+                    </select>
+                    <div id="categoriaError" class="error-message">Selecciona una categoría</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción (opcional)</label>
+                    <textarea id="descripcion" rows="3" placeholder="Cuéntanos más sobre esta imagen..."></textarea>
+                </div>
+
+                <button type="submit" class="upload-btn" id="uploadBtn">
+                    <i class="fas fa-upload"></i> Publicar
+                </button>
+            </form>
+
+            <div id="loadingUpload" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Subiendo imagen...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Verificar autenticación
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+            if (!token || !user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            let selectedFile = null;
+            let categories = [];
+
+            // ========== CARGAR CATEGORÍAS DESDE LA API ==========
+            async function loadCategories() {
+                const selectCategoria = $('#categoria');
+                selectCategoria.html('<option value="">Cargando categorías...</option>');
+                
+                try {
+                    const response = await fetch('http://localhost:8000/categories');
+                    if (response.ok) {
+                        categories = await response.json();
+                        
+                        if (categories.length === 0) {
+                            selectCategoria.html('<option value="">No hay categorías disponibles</option>');
+                        } else {
+                            let options = '<option value="">Selecciona una categoría</option>';
+                            categories.forEach(cat => {
+                                options += `<option value="${escapeHtml(cat.nombre)}">${escapeHtml(cat.nombre)}</option>`;
+                            });
+                            selectCategoria.html(options);
+                        }
+                    } else {
+                        throw new Error('Error al cargar categorías');
+                    }
+                } catch (error) {
+                    console.error('Error cargando categorías:', error);
+                    // Categorías de respaldo en caso de error
+                    const fallbackCategories = ['Arte', 'Naturaleza', 'Paisajes', 'Animales', 'Viajes', 'Diseño', 'Fotografía', 'Comida', 'Moda'];
+                    let options = '<option value="">Selecciona una categoría</option>';
+                    fallbackCategories.forEach(cat => {
+                        options += `<option value="${cat}">${cat}</option>`;
+                    });
+                    selectCategoria.html(options);
+                    showAlert('No se pudieron cargar las categorías. Usando lista local.', 'error');
+                }
+            }
+
+            // ========== DROPZONE ==========
+            const dropzone = $('#dropzone');
+            const fileInput = $('#fileInput');
+            const fileName = $('#fileName');
+            const previewContainer = $('#previewContainer');
+            const previewImg = $('#previewImg');
+
+            dropzone.on('click', function() {
+                fileInput.click();
+            });
+
+            fileInput.on('change', function(e) {
+                if (e.target.files.length) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+
+            dropzone.on('dragover', function(e) {
+                e.preventDefault();
+                dropzone.addClass('dragover');
+            });
+
+            dropzone.on('dragleave', function(e) {
+                e.preventDefault();
+                dropzone.removeClass('dragover');
+            });
+
+            dropzone.on('drop', function(e) {
+                e.preventDefault();
+                dropzone.removeClass('dragover');
+                if (e.originalEvent.dataTransfer.files.length) {
+                    handleFile(e.originalEvent.dataTransfer.files[0]);
+                }
+            });
+
+            function handleFile(file) {
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+                
+                if (!allowedTypes.includes(file.type)) {
+                    showAlert('Tipo de archivo no permitido. Solo imágenes.', 'error');
+                    return;
+                }
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    showAlert('La imagen no puede superar los 10MB.', 'error');
+                    return;
+                }
+                
+                selectedFile = file;
+                fileName.text(file.name);
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.attr('src', e.target.result);
+                    previewContainer.show();
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // ========== SUBIR IMAGEN AL ENDPOINT /posts ==========
+            $('#uploadForm').on('submit', async function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                const titulo = $('#titulo').val().trim();
+                const categoria = $('#categoria').val();
+                
+                if (!titulo) {
+                    $('#titulo').addClass('error');
+                    $('#tituloError').show();
+                    isValid = false;
+                } else {
+                    $('#titulo').removeClass('error');
+                    $('#tituloError').hide();
+                }
+                
+                if (!categoria) {
+                    $('#categoria').addClass('error');
+                    $('#categoriaError').show();
+                    isValid = false;
+                } else {
+                    $('#categoria').removeClass('error');
+                    $('#categoriaError').hide();
+                }
+                
+                if (!selectedFile) {
+                    showAlert('Selecciona una imagen', 'error');
+                    return;
+                }
+                
+                if (!isValid) return;
+                
+                const formData = new FormData();
+                formData.append('titulo', titulo);
+                formData.append('categoria', categoria);
+                formData.append('descripcion', $('#descripcion').val());
+                formData.append('autor_id', user.id);
+                formData.append('file', selectedFile);
+                
+                const $btn = $('#uploadBtn');
+                const originalText = $btn.html();
+                $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Subiendo...');
+                $('#loadingUpload').show();
+                $('#uploadForm').hide();
+                
+                try {
+                    const response = await fetch('http://localhost:8000/posts', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        showAlert('¡Imagen subida con éxito! Redirigiendo...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        throw new Error(data.detail || 'Error al subir la imagen');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert(error.message, 'error');
+                    $btn.prop('disabled', false).html(originalText);
+                    $('#loadingUpload').hide();
+                    $('#uploadForm').show();
+                }
+            });
+            
+            function showAlert(message, type) {
+                const $alert = $('#alertMessage');
+                $alert.text(message);
+                $alert.removeClass('alert-success alert-error');
+                $alert.addClass(type === 'error' ? 'alert-error' : 'alert-success');
+                $alert.show();
+                
+                setTimeout(() => {
+                    $alert.fadeOut();
+                }, 4000);
+            }
+            
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            // Limpiar errores al escribir
+            $('#titulo, #categoria').on('input change', function() {
+                $(this).removeClass('error');
+                $(this).closest('.form-group').find('.error-message').hide();
+                $('#alertMessage').hide();
+            });
+            
+            // Cargar categorías al iniciar
+            loadCategories();
+        });
+    </script>
+
+</body>
+</html>

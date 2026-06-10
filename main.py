@@ -20,6 +20,7 @@ if os.path.exists(".env"):
 from db import create_all_table, engine, SessionDep
 from models import Categoria, Post, Usuario
 from app.routers import auth, posts, notifications
+from app.routers.auth import get_current_user
 
 # Inicializar la aplicación FastAPI con el ciclo de vida de la base de datos
 app = FastAPI(lifespan=create_all_table)
@@ -96,7 +97,10 @@ def get_user_by_id(user_id: int, session: SessionDep):
     }
 
 
-# Evento de inicialización para sembrar datos semilla
+# ==============================================================================
+# EVENTO DE INICIALIZACIÓN
+# ==============================================================================
+
 @app.on_event("startup")
 def seed_data():
     with Session(engine) as session:
