@@ -214,6 +214,31 @@ def get_categories(session: SessionDep):
     statement = select(Categoria)
     return session.exec(statement).all()
 
+@router.post("/categories", status_code=status.HTTP_201_CREATED)
+def create_category(categoria: Categoria, session: SessionDep):
+    """Crea una nueva categoría manualmente."""
+    normalized_name = categoria.nombre.strip().title()
+    if not normalized_name:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El nombre de la categoría no puede estar vacío."
+        )
+        
+    statement = select(Categoria).where(Categoria.nombre == normalized_name)
+    existing = session.exec(statement).first()
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La categoría ya existe."
+        )
+        
+    nueva_cat = Categoria(nombre=normalized_name)
+    session.add(nueva_cat)
+    session.commit()
+    session.refresh(nueva_cat)
+    return nueva_cat
+
+
 @router.post("/posts/{post_id}/save")
 def save_post_endpoint(post_id: int, payload: dict, session: SessionDep):
     """Guarda un post local y genera notificación al creador original (Extra)."""
