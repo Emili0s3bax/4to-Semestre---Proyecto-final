@@ -12,12 +12,10 @@ BUCKET_NAME = "uide-publify-hub-prod-s3"
 S3_PREFIX = "pins-multimedia/"
 
 def get_s3_client():
-    """
-    Inicializa el cliente de AWS S3 utilizando las credenciales programáticas
-    seguras del usuario zahid_cloud_developer (configuradas como variables de entorno).
-    """
+    
     access_key = os.getenv("AWS_ACCESS_KEY_ID")
     secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+    session_token = os.getenv("AWS_SESSION_TOKEN")  # <-- AGREGA ESTA LÍNEA AQUÍ
     region = os.getenv("AWS_DEFAULT_REGION", "us-east-2")
     
     return boto3.client(
