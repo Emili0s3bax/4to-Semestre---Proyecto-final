@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar - Publify</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        .explore-header {
+            background: white;
+            border-bottom: 1px solid #e2e2e2;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #efefef;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e2e2e2;
+        }
+
+        .explore-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-actions i {
+            font-size: 22px;
+            color: #111;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .profile-icon img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .explore-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .explore-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: #111;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-image {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .category-card:hover .category-image img {
+            transform: scale(1.05);
+        }
+
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 20px;
+        }
+
+        .category-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .category-count {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .category-info {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-description {
+            font-size: 13px;
+            color: #767676;
+        }
+
+        .explore-btn {
+            background: #7B2D8E;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .explore-btn:hover {
+            background: #5a1a6b;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e2e2e2;
+            border-top-color: #7B2D8E;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-categories {
+            text-align: center;
+            padding: 60px;
+            color: #767676;
+        }
+
+        .no-categories i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            color: #7B2D8E;
+        }
+
+        /* Autenticación */
+        .user-menu {
+            position: relative;
+        }
+
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 40px;
+            transition: background 0.2s;
+        }
+
+        .profile-icon:hover {
+            background: #efefef;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            padding: 12px 16px;
+        }
+
+        .dropdown-header strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .dropdown-header span {
+            font-size: 12px;
+            color: #767676;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e2e2e2;
+            margin: 4px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: #111;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+
+        .logout-btn {
+            color: #7B2D8E;
+        }
+
+        .logout-btn i {
+            color: #7B2D8E;
+        }
+
+        .auth-btn {
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .login-btn-header {
+            background: transparent;
+            color: #111;
+        }
+
+        .login-btn-header:hover {
+            background: #efefef;
+        }
+
+        .register-btn-header {
+            background: #7B2D8E;
+            color: white;
+        }
+
+        .register-btn-header:hover {
+            background: #5a1a6b;
+        }
+
+        @media (max-width: 768px) {
+            .explore-container {
+                padding: 20px 16px;
+            }
+            .explore-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+            .category-image {
+                height: 160px;
+            }
+            .category-name {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="explore-header">
+        <div class="header-left">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1>Explorar</h1>
+        </div>
+        <div class="header-actions" id="headerActions">
+            <!-- Se carga dinámicamente -->
+        </div>
+    </div>
+
+    <div class="explore-container">
+        <h2 class="explore-title">Descubre por categorías</h2>
+        
+        <div id="categoriesContainer" class="categories-grid">
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Cargando categorías...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let allPosts = [];
+            let categories = [];
+            let currentUser = null;
+
+            // ========== GESTIÓN DE USUARIO ==========
+            function updateUserUI() {
+                const token = localStorage.getItem('token');
+                const user = JSON.parse(localStorage.getItem('user') || 'null');
+                const headerActions = $('#headerActions');
+                
+                if (token && user) {
+                    currentUser = user;
+                    headerActions.html(`
+                        <div class="user-menu">
+                            <div class="profile-icon" id="userMenuBtn">
+                                <div class="user-avatar" style="background-color: ${user.avatar_color || '#7B2D8E'}">
+                                    ${user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="user-dropdown" id="userDropdown">
+                                <div class="dropdown-header">
+                                    <strong>${escapeHtml(user.nombre || user.username)}</strong>
+                                    <span>@${escapeHtml(user.username)}</span>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a href="profile.html" class="dropdown-item">
+                                    <i class="fas fa-user"></i> Mi perfil
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <button id="logoutBtn" class="dropdown-item logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                </button>
+                            </div>
+                        </div>
+                    `);
+                    
+                    $('#userMenuBtn').on('click', function(e) {
+                        e.stopPropagation();
+                        $('#userDropdown').toggle();
+                    });
+                    
+                    $(document).on('click', function() {
+                        $('#userDropdown').hide();
+                    });
+                    
+                    $('#logoutBtn').on('click', function() {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'index.html';
+                    });
+                } else {
+                    headerActions.html(`
+                        <a href="login.html" class="auth-btn login-btn-header">Iniciar sesión</a>
+                        <a href="register.html" class="auth-btn register-btn-header">Registrarse</a>
+                    `);
+                }
+            }
+
+            // ========== OBTENER CATEGORÍAS Y POSTS ==========
+            async function fetchCategories() {
+                try {
+                    const response = await fetch('http://localhost:8000/categories');
+                    categories = await response.json();
+                    return categories;
+                } catch (error) {
+                    console.error('Error cargando categorías:', error);
+                    categories = [
+                        { id: 1, nombre: "Arte" },
+                        { id: 2, nombre: "Naturaleza" },
+                        { id: 3, nombre: "Paisajes" },
+                        { id: 4, nombre: "Animales" },
+                        { id: 5, nombre: "Viajes" },
+                        { id: 6, nombre: "Diseño" },
+                        { id: 7, nombre: "Fotografía" },
+                        { id: 8, nombre: "Comida" },
+                        { id: 9, nombre: "Moda" }
+                    ];
+                    return categories;
+                }
+            }
+
+            async function fetchPosts() {
+                try {
+                    const response = await fetch('http://localhost:8000/posts');
+                    allPosts = await response.json();
+                    return allPosts;
+                } catch (error) {
+                    console.error('Error cargando posts:', error);
+                    allPosts = [];
+                    return allPosts;
+                }
+            }
+
+            function getRandomImageForCategory(categoryName) {
+                const categoryPosts = allPosts.filter(post => post.categoria === categoryName);
+                if (categoryPosts.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * categoryPosts.length);
+                    return categoryPosts[randomIndex].url;
+                }
+                const fallbackImages = {
+                    "Arte": "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600",
+                    "Naturaleza": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600",
+                    "Paisajes": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600",
+                    "Animales": "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600",
+                    "Viajes": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600",
+                    "Diseño": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600",
+                    "Fotografía": "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600",
+                    "Comida": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600",
+                    "Moda": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"
+                };
+                return fallbackImages[categoryName] || "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600";
+            }
+
+            function getPostCountByCategory(categoryName) {
+                return allPosts.filter(post => post.categoria === categoryName).length;
+            }
+
+            function renderCategories() {
+                const container = $('#categoriesContainer');
+                container.empty();
+
+                if (categories.length === 0) {
+                    container.html(`
+                        <div class="no-categories">
+                            <i class="fas fa-folder-open"></i>
+                            <p>No hay categorías disponibles</p>
+                        </div>
+                    `);
+                    return;
+                }
+
+                categories.forEach(category => {
+                    const imageUrl = getRandomImageForCategory(category.nombre);
+                    const postCount = getPostCountByCategory(category.nombre);
+                    
+                    const card = `
+                        <div class="category-card" data-categoria="${category.nombre}">
+                            <div class="category-image">
+                                <img src="${imageUrl}" alt="${category.nombre}" loading="lazy">
+                                <div class="category-overlay">
+                                    <h3 class="category-name">${escapeHtml(category.nombre)}</h3>
+                                    <span class="category-count">${postCount} publicaciones</span>
+                                </div>
+                            </div>
+                            <div class="category-info">
+                                <span class="category-description">Explora ${postCount} ideas increíbles</span>
+                                <button class="explore-btn" data-categoria="${category.nombre}">Explorar</button>
+                            </div>
+                        </div>
+                    `;
+                    container.append(card);
+                });
+
+                // Evento para explorar categoría
+                $('.explore-btn').on('click', function(e) {
+                    e.stopPropagation();
+                    const categoria = $(this).data('categoria');
+                    window.location.href = `index.html?categoria=${encodeURIComponent(categoria)}`;
+                });
+
+                $('.category-card').on('click', function() {
+                    const categoria = $(this).data('categoria');
+                    window.location.href = `index.html?categoria=${encodeURIComponent(categoria)}`;
+                });
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            async function init() {
+                updateUserUI();
+                await fetchPosts();
+                await fetchCategories();
+                renderCategories();
+            }
+
+            init();
+        });
+    </script>
+
+</body>
+</html>

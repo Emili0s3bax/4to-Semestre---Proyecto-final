@@ -132,7 +132,7 @@
                     headerActions.html(`
                         <div class="user-menu">
                             <div class="profile-icon" id="userMenuBtn">
-                                <div class="user-avatar" style="background-color: ${user.avatar_color || '#e60023'}">
+                                <div class="user-avatar" style="background-color: ${user.avatar_color || '#7B2D8E'}">
                                     ${user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
                                 </div>
                                 <i class="fas fa-chevron-down"></i>
@@ -155,7 +155,7 @@
                     `);
                     
                     $('#currentUserAvatar').html(`
-                        <div class="user-avatar" style="background-color: ${user.avatar_color || '#e60023'}; width: 32px; height: 32px; font-size: 14px;">
+                        <div class="user-avatar" style="background-color: ${user.avatar_color || '#7B2D8E'}; width: 32px; height: 32px; font-size: 14px;">
                             ${user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
                         </div>
                     `);
@@ -235,7 +235,7 @@
                         id: userToFollow.id,
                         nombre: userToFollow.nombre || userToFollow.autor_nombre,
                         username: userToFollow.username || (userToFollow.autor_nombre || '').toLowerCase().replace(/\s/g, ''),
-                        avatar_color: userToFollow.avatar_color || '#e60023'
+                        avatar_color: userToFollow.avatar_color || '#7B2D8E'
                     });
                     saveFollowing(following);
                     return true;
@@ -253,7 +253,7 @@
 
             function updateFollowButton() {
                 if (!currentUser) {
-                    $('#followBtn').text('Seguir').css('background', '#e60023').css('color', 'white');
+                    $('#followBtn').text('Seguir').css('background', '#7B2D8E').css('color', 'white');
                     return;
                 }
                 
@@ -261,7 +261,7 @@
                 if (authorId && isFollowing(authorId)) {
                     $('#followBtn').text('Siguiendo').css('background', '#efefef').css('color', '#111');
                 } else {
-                    $('#followBtn').text('Seguir').css('background', '#e60023').css('color', 'white');
+                    $('#followBtn').text('Seguir').css('background', '#7B2D8E').css('color', 'white');
                 }
             }
 
@@ -340,7 +340,7 @@
                 const likeIcon = $('#likeBtn i');
                 if (isLiked) {
                     likeIcon.removeClass('far').addClass('fas');
-                    likeIcon.css('color', '#e60023');
+                    likeIcon.css('color', '#7B2D8E');
                 } else {
                     likeIcon.removeClass('fas').addClass('far');
                     likeIcon.css('color', 'white');
@@ -397,7 +397,7 @@
                     const commentHtml = `
                         <div class="comment-item">
                             <div class="comment-avatar-img">
-                                <div class="user-avatar" style="background-color: ${comment.avatar_color || '#ccc'}; width: 36px; height: 36px; font-size: 14px;">
+                                <div class="user-avatar" style="background-color: ${comment.avatar_color || '#7B2D8E'}; width: 36px; height: 36px; font-size: 14px;">
                                     ${comment.nombre ? comment.nombre.charAt(0).toUpperCase() : '?'}
                                 </div>
                             </div>
@@ -451,7 +451,7 @@
                     nombre: currentUser.nombre || currentUser.username,
                     texto: commentText.trim(),
                     fecha: new Date().toISOString(),
-                    avatar_color: currentUser.avatar_color || '#e60023'
+                    avatar_color: currentUser.avatar_color || '#7B2D8E'
                 };
                 comments.push(newComment);
                 saveComments(postId, comments);
@@ -500,7 +500,7 @@
                 if (isSaved) {
                     $('#savePinBtn').html('<i class="fas fa-check"></i> Guardado').css('background', '#111');
                 } else {
-                    $('#savePinBtn').html('<i class="fas fa-save"></i> Guardar').css('background', '#e60023');
+                    $('#savePinBtn').html('<i class="fas fa-save"></i> Guardar').css('background', '#7B2D8E');
                 }
             }
 
@@ -597,14 +597,14 @@
                 
                 if (authorId && isFollowing(authorId)) {
                     unfollowUser(authorId);
-                    $('#followBtn').text('Seguir').css('background', '#e60023').css('color', 'white');
+                    $('#followBtn').text('Seguir').css('background', '#7B2D8E').css('color', 'white');
                     showToast(`Dejaste de seguir a ${authorName}`, 'info');
                 } else {
                     followUser({
                         id: authorId || Date.now(),
                         nombre: authorName,
                         username: authorName.toLowerCase().replace(/\s/g, ''),
-                        avatar_color: '#e60023'
+                        avatar_color: '#7B2D8E'
                     });
                     $('#followBtn').text('Siguiendo').css('background', '#efefef').css('color', '#111');
                     showToast(`Ahora sigues a ${authorName}`, 'success');

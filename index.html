@@ -238,6 +238,44 @@
             font-size: 18px;
         }
 
+        /* Banner de categoría activa */
+        .category-banner {
+            background: linear-gradient(135deg, #7B2D8E 0%, #b76ed6 100%);
+            padding: 20px 24px;
+            margin: 0 24px 20px 24px;
+            border-radius: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-banner-info h3 {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .category-banner-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .clear-filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .clear-filter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         @media (max-width: 900px) {
             .sidebar {
                 position: fixed;
@@ -258,6 +296,13 @@
             .main-wrapper {
                 margin-left: 0;
             }
+            .category-banner {
+                margin: 0 16px 16px 16px;
+                padding: 16px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -271,11 +316,9 @@
         </div>
         
         <div class="nav-icons">
-            <div class="nav-item active"><i class="fas fa-home"></i><span>Inicio</span></div>
-            <div class="nav-item"><i class="fas fa-compass"></i><span>Explorar</span></div>
+            <div class="nav-item active" id="homeNavBtn"><i class="fas fa-home"></i><span>Inicio</span></div>
+            <div class="nav-item" id="exploreNavBtn"><i class="fas fa-compass"></i><span>Explorar</span></div>
             <div class="nav-item" id="createNavBtn"><i class="fas fa-plus-circle"></i><span>Crear</span></div>
-            <div class="nav-item"><i class="fas fa-bell"></i><span>Notificaciones</span></div>
-            <div class="nav-item"><i class="fas fa-envelope"></i><span>Mensajes</span></div>
         </div>
 
         <div class="settings-container">
@@ -298,6 +341,17 @@
             </div>
         </header>
 
+        <!-- Banner de categoría activa (se muestra solo cuando hay filtro) -->
+        <div id="categoryBanner" class="category-banner" style="display: none;">
+            <div class="category-banner-info">
+                <h3 id="activeCategoryName"></h3>
+                <p id="activeCategoryCount">Explora las mejores ideas en esta categoría</p>
+            </div>
+            <button class="clear-filter-btn" id="clearFilterBtn">
+                <i class="fas fa-times"></i> Ver todas
+            </button>
+        </div>
+
         <main id="pinterest-container" class="masonry-grid"></main>
 
         <div class="loader" id="loader" style="display: none;">
@@ -310,9 +364,17 @@
         $(document).ready(function() {
             let allPosts = [];
             let displayedPosts = [];
+            let currentCategory = null;
             let isLoading = false;
             let currentPage = 0;
             const POSTS_PER_PAGE = 12;
+
+            // Leer categoría de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoriaFromUrl = urlParams.get('categoria');
+            if (categoriaFromUrl) {
+                currentCategory = categoriaFromUrl;
+            }
 
             // ========== GESTIÓN DE USUARIO ==========
             function updateUserUI() {
@@ -385,7 +447,7 @@
                 }
             }
 
-            // ========== BOTÓN CREAR - REDIRIGIR A UPLOAD ==========
+            // ========== BOTONES DE NAVEGACIÓN ==========
             $('#createNavBtn').on('click', function() {
                 const token = localStorage.getItem('token');
                 if (!token) {
@@ -396,10 +458,38 @@
                 }
             });
 
+            $('#exploreNavBtn').on('click', function() {
+                window.location.href = 'explorar.html';
+            });
+
+            $('#homeNavBtn').on('click', function() {
+                window.location.href = 'index.html';
+            });
+
+            $('#clearFilterBtn').on('click', function() {
+                window.location.href = 'index.html';
+            });
+
+            // Mostrar banner si hay categoría activa
+            function updateCategoryBanner() {
+                if (currentCategory) {
+                    $('#activeCategoryName').text(currentCategory);
+                    const count = allPosts.filter(p => p.categoria === currentCategory).length;
+                    $('#activeCategoryCount').text(`${count} publicaciones en esta categoría`);
+                    $('#categoryBanner').show();
+                } else {
+                    $('#categoryBanner').hide();
+                }
+            }
+
             // ========== OBTENER POSTS DE LA API ==========
             async function fetchPosts() {
                 try {
-                    const response = await fetch('http://localhost:8000/posts');
+                    let url = 'http://localhost:8000/posts';
+                    if (currentCategory) {
+                        url += `?category=${encodeURIComponent(currentCategory)}`;
+                    }
+                    const response = await fetch(url);
                     allPosts = await response.json();
                     
                     allPosts = allPosts.map(post => ({
@@ -409,6 +499,7 @@
                         likes: Math.floor(Math.random() * 500) + 10
                     }));
                     
+                    updateCategoryBanner();
                     filterAndDisplayPosts();
                 } catch (error) {
                     console.error('Error:', error);
@@ -419,13 +510,18 @@
                         { id: 4, url: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600", titulo: "Zorro Curioso", categoria: "Animales", autor_nombre: "Wildlife", likes: 445 },
                         { id: 5, url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600", titulo: "Playa Caribeña", categoria: "Viajes", autor_nombre: "Tropical", likes: 1234 }
                     ];
+                    updateCategoryBanner();
                     filterAndDisplayPosts();
                 }
             }
 
-            // ========== FILTRAR POSTS (SOLO BÚSQUEDA) ==========
+            // ========== FILTRAR POSTS ==========
             function filterAndDisplayPosts() {
                 let filtered = [...allPosts];
+                
+                if (currentCategory) {
+                    filtered = filtered.filter(post => post.categoria === currentCategory);
+                }
                 
                 const searchTerm = $('#main-search').val().toLowerCase();
                 if (searchTerm) {

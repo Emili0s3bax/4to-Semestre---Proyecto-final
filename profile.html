@@ -66,7 +66,7 @@
 
         .cover-banner {
             height: 120px;
-            background: linear-gradient(135deg, #e60023 0%, #ff6b6b 100%);
+            background: linear-gradient(135deg, #7B2D8E 0%, #b76ed6 100%);
         }
 
         .avatar-section {
@@ -199,16 +199,16 @@
         }
 
         .form-group input:focus {
-            border-color: #e60023;
+            border-color: #7B2D8E;
         }
 
         .form-group input.error {
-            border-color: #e60023;
+            border-color: #7B2D8E;
             background: #fff5f5;
         }
 
         .error-message {
-            color: #e60023;
+            color: #7B2D8E;
             font-size: 12px;
             margin-top: 5px;
             display: none;
@@ -223,7 +223,7 @@
         .save-btn {
             flex: 1;
             padding: 12px;
-            background: #e60023;
+            background: #7B2D8E;
             color: white;
             border: none;
             border-radius: 40px;
@@ -233,7 +233,7 @@
         }
 
         .save-btn:hover {
-            background: #ad081b;
+            background: #5a1a6b;
         }
 
         .save-btn:disabled {
@@ -329,9 +329,9 @@
         }
 
         .unfollow-btn:hover {
-            background: #e60023;
+            background: #7B2D8E;
             color: white;
-            border-color: #e60023;
+            border-color: #7B2D8E;
         }
 
         .empty-following {
@@ -356,7 +356,7 @@
 
         .alert-error {
             background: #fff5f5;
-            color: #e60023;
+            color: #7B2D8E;
             border: 1px solid #ffcdcd;
         }
 
@@ -369,7 +369,7 @@
             width: 50px;
             height: 50px;
             border: 3px solid #e2e2e2;
-            border-top-color: #e60023;
+            border-top-color: #7B2D8E;
             border-radius: 50%;
             margin: 0 auto 16px;
             animation: spin 0.8s linear infinite;
@@ -511,7 +511,7 @@
             let currentUser = null;
             let allUsers = [];
             let followingList = [];
-            let avatarColors = ['#e60023', '#0076d3', '#008a15', '#e600b3', '#e6b300', '#00b3e6', '#7600d3', '#d35400', '#1abc9c', '#2c3e50'];
+            let avatarColors = ['#7B2D8E', '#0076d3', '#008a15', '#e600b3', '#e6b300', '#00b3e6', '#7600d3', '#d35400', '#1abc9c', '#2c3e50'];
 
             // Verificar autenticación
             const token = localStorage.getItem('token');
@@ -596,7 +596,7 @@
                 followingList.forEach(followed => {
                     const item = `
                         <div class="following-item" data-user-id="${followed.id}">
-                            <div class="following-avatar" style="background-color: ${followed.avatar_color || '#e60023'}">
+                            <div class="following-avatar" style="background-color: ${followed.avatar_color || '#7B2D8E'}">
                                 ${followed.nombre ? followed.nombre.charAt(0).toUpperCase() : followed.username.charAt(0).toUpperCase()}
                             </div>
                             <div class="following-info">
@@ -643,7 +643,7 @@
                             localStorage.removeItem('user');
                             window.location.href = 'login.html';
                         } else {
-                            $('#loading').html('<p style="color: #e60023;">Error al cargar el perfil</p>');
+                            $('#loading').html('<p style="color: #7B2D8E;">Error al cargar el perfil</p>');
                         }
                     }
                 });
