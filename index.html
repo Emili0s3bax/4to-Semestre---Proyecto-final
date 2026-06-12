@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/index.css">
     <style>
-        /* ========== ESTILOS EXCLUSIVOS DE AUTENTICACIÓN (NO ESTÁN EN index.css) ========== */
+        /* ========== ESTILOS EXCLUSIVOS DE AUTENTICACIÓN ========== */
         .header-actions {
             display: flex;
             align-items: center;
@@ -34,12 +34,12 @@
         }
 
         .register-btn-header {
-            background: #e60023;
+            background: #7B2D8E;
             color: white;
         }
 
         .register-btn-header:hover {
-            background: #ad081b;
+            background: #5a1a6b;
         }
 
         .user-menu {
@@ -125,14 +125,14 @@
         }
 
         .logout-btn {
-            color: #e60023;
+            color: #7B2D8E;
         }
 
         .logout-btn i {
-            color: #e60023;
+            color: #7B2D8E;
         }
 
-        /* Overlay y estilos de tarjetas (no están en index.css) */
+        /* Overlay y estilos de tarjetas */
         .post-image-wrapper {
             position: relative;
             cursor: pointer;
@@ -168,7 +168,7 @@
         }
 
         .save-pin-btn {
-            background: #e60023;
+            background: #7B2D8E;
             color: white;
         }
 
@@ -177,7 +177,7 @@
         }
 
         .like-pin-btn.liked {
-            background: #e60023;
+            background: #7B2D8E;
             color: white;
         }
 
@@ -217,7 +217,7 @@
             width: 40px;
             height: 40px;
             border: 3px solid #e2e2e2;
-            border-top-color: #e60023;
+            border-top-color: #7B2D8E;
             border-radius: 50%;
             margin: 0 auto 12px;
             animation: spin 0.8s linear infinite;
@@ -225,32 +225,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        .categories-bar {
-            display: flex;
-            gap: 12px;
-            padding: 16px 24px;
-            overflow-x: auto;
-            border-bottom: 1px solid #e2e2e2;
-            background: white;
-            position: sticky;
-            top: 73px;
-            z-index: 98;
-        }
-
-        .category-btn {
-            padding: 8px 20px;
-            border-radius: 40px;
-            border: none;
-            background: #efefef;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .category-btn.active {
-            background: #111;
-            color: white;
         }
 
         .menu-toggle {
@@ -292,7 +266,7 @@
     <!-- BARRA LATERAL -->
     <nav class="sidebar">
         <div class="logo-container">
-            <i class="fab fa-pinterest"></i>
+            <img src="/imagenes/descarga.png" alt="Logo Publify" class="logo-img">
             <span class="logo-text">Publify</span>
         </div>
         
@@ -324,16 +298,6 @@
             </div>
         </header>
 
-        <!-- Barra de categorías -->
-        <div class="categories-bar">
-            <button class="category-btn active" data-categoria="todos">Para ti</button>
-            <button class="category-btn" data-categoria="Arte">Arte</button>
-            <button class="category-btn" data-categoria="Naturaleza">Naturaleza</button>
-            <button class="category-btn" data-categoria="Paisajes">Paisajes</button>
-            <button class="category-btn" data-categoria="Animales">Animales</button>
-            <button class="category-btn" data-categoria="Viajes">Viajes</button>
-        </div>
-
         <main id="pinterest-container" class="masonry-grid"></main>
 
         <div class="loader" id="loader" style="display: none;">
@@ -346,7 +310,6 @@
         $(document).ready(function() {
             let allPosts = [];
             let displayedPosts = [];
-            let currentCategory = 'todos';
             let isLoading = false;
             let currentPage = 0;
             const POSTS_PER_PAGE = 12;
@@ -361,7 +324,7 @@
                     headerActions.html(`
                         <div class="user-menu">
                             <div class="profile-icon" id="userMenuBtn">
-                                <div class="user-avatar" style="background-color: ${user.avatar_color || '#e60023'}">
+                                <div class="user-avatar" style="background-color: ${user.avatar_color || '#7B2D8E'}">
                                     ${user.nombre ? user.nombre.charAt(0).toUpperCase() : 'U'}
                                 </div>
                                 <i class="fas fa-chevron-down"></i>
@@ -460,13 +423,9 @@
                 }
             }
 
-            // ========== FILTRAR POSTS ==========
+            // ========== FILTRAR POSTS (SOLO BÚSQUEDA) ==========
             function filterAndDisplayPosts() {
                 let filtered = [...allPosts];
-                
-                if (currentCategory !== 'todos') {
-                    filtered = filtered.filter(post => post.categoria === currentCategory);
-                }
                 
                 const searchTerm = $('#main-search').val().toLowerCase();
                 if (searchTerm) {
@@ -617,13 +576,6 @@
 
             // ========== EVENTOS ==========
             $('#main-search').on('input', function() {
-                filterAndDisplayPosts();
-            });
-            
-            $('.category-btn').on('click', function() {
-                $('.category-btn').removeClass('active');
-                $(this).addClass('active');
-                currentCategory = $(this).data('categoria');
                 filterAndDisplayPosts();
             });
             
