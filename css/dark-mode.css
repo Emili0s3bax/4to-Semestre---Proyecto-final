@@ -1,0 +1,232 @@
+/* ========== MODO OSCURO - ESTILOS GLOBALES ========== */
+
+body.dark-mode {
+    --text-dark: #ffffff;
+    --text-gray: #a0a0a0;
+    --gray-bg: #2a2a2a;
+    --gray-border: #3a3a3a;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Modo oscuro - Sidebar */
+body.dark-mode .sidebar {
+    background-color: #1e1e1e;
+    border-right-color: #3a3a3a;
+}
+
+body.dark-mode .logo-text {
+    color: #ffffff;
+}
+
+body.dark-mode .nav-item {
+    color: #e0e0e0;
+}
+
+body.dark-mode .nav-item:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .nav-item.active {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .settings-container {
+    border-top-color: #3a3a3a;
+}
+
+/* Modo oscuro - Header */
+body.dark-mode .detail-header,
+body.dark-mode .explore-header,
+body.dark-mode header {
+    background-color: #1e1e1e;
+    border-bottom-color: #3a3a3a;
+}
+
+body.dark-mode .search-container {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .search-container input {
+    color: #ffffff;
+}
+
+body.dark-mode .search-container input::placeholder {
+    color: #888888;
+}
+
+/* Modo oscuro - Tarjetas */
+body.dark-mode .post-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .post-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .post-title {
+    color: #ffffff;
+}
+
+body.dark-mode .post-author span {
+    color: #a0a0a0;
+}
+
+/* Modo oscuro - Detalle */
+body.dark-mode .pin-detail-card {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .pin-detail-info {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .pin-author,
+body.dark-mode .comments-header,
+body.dark-mode .comment-input-container {
+    border-bottom-color: #3a3a3a;
+    border-top-color: #3a3a3a;
+}
+
+body.dark-mode .comment-item {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .comment-header-detail strong {
+    color: #ffffff;
+}
+
+body.dark-mode .comment-content-detail p {
+    color: #e0e0e0;
+}
+
+body.dark-mode .comment-input-container input {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+}
+
+body.dark-mode .related-pin-overlay {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .related-pin-overlay p {
+    color: #ffffff;
+}
+
+/* Modo oscuro - Categorías */
+body.dark-mode .categories-bar {
+    background-color: #1e1e1e;
+    border-bottom-color: #3a3a3a;
+}
+
+body.dark-mode .category-btn {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .category-btn.active {
+    background-color: #7B2D8E;
+    color: white;
+}
+
+body.dark-mode .category-banner {
+    background: linear-gradient(135deg, #5a1a6b 0%, #7B2D8E 100%);
+}
+
+/* Modo oscuro - Perfil */
+body.dark-mode .profile-card,
+body.dark-mode .profile-header {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .profile-name {
+    color: #ffffff;
+}
+
+body.dark-mode .profile-username {
+    color: #a0a0a0;
+}
+
+body.dark-mode .edit-form input,
+body.dark-mode .edit-form select,
+body.dark-mode .edit-form textarea {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+}
+
+body.dark-mode .following-item {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .following-item:hover {
+    background-color: #3a3a3a;
+}
+
+body.dark-mode .following-info strong {
+    color: #ffffff;
+}
+
+/* Modo oscuro - Upload */
+body.dark-mode .upload-card,
+body.dark-mode .upload-header {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .dropzone {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+body.dark-mode .dropzone:hover {
+    background-color: #3a3a3a;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+}
+
+/* Modo oscuro - Login/Register */
+body.dark-mode .login-card,
+body.dark-mode .register-card {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .input-wrapper input {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+}
+
+body.dark-mode .login-title,
+body.dark-mode .register-title {
+    color: #ffffff;
+}
+
+/* Modo oscuro - Dropdowns */
+body.dark-mode .user-dropdown {
+    background-color: #1e1e1e;
+    border-color: #3a3a3a;
+}
+
+body.dark-mode .dropdown-item {
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .dropdown-header strong {
+    color: #ffffff;
+}
+
+body.dark-mode .dropdown-divider {
+    background-color: #3a3a3a;
+}
