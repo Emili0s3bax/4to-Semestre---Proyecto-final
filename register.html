@@ -269,9 +269,9 @@
                     <label>Edad</label>
                     <div class="input-wrapper">
                         <i class="fas fa-calendar-alt"></i>
-                        <input type="number" id="edad" placeholder="18" min="13" max="120">
+                        <input type="number" id="edad" placeholder="18" min="18" max="120">
                     </div>
-                    <div id="edadError" class="error-message">Debes tener al menos 13 años</div>
+                    <div id="edadError" class="error-message">Debes tener al menos 18 años para registrarte (Exclusión de menores de edad)</div>
                 </div>
 
                 <div class="input-group">
@@ -281,6 +281,14 @@
                         <input type="password" id="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
                     </div>
                     <div id="passwordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+                </div>
+
+                <!-- Casilla de Aceptación de Términos y Condiciones -->
+                <div class="input-group" style="display: flex; align-items: center; gap: 8px; margin-top: 24px; margin-bottom: 24px; text-align: left;">
+                    <input type="checkbox" id="aceptaTerminos" required style="width: auto; height: auto; cursor: pointer; margin-right: 8px;">
+                    <label for="aceptaTerminos" style="font-size: 13px; color: #767676; margin-bottom: 0; cursor: pointer; font-weight: normal; display: inline;">
+                        Acepto los <a href="terminos.html" target="_blank" style="color: #e60023; text-decoration: none; font-weight: 600;">Términos, Condiciones y Políticas de Seguridad</a>
+                    </label>
                 </div>
 
                 <button type="submit" class="register-btn" id="registerBtn">Registrarse</button>
@@ -352,7 +360,7 @@
                     isValid = false;
                 }
                 
-                if (!edad || edad < 13 || edad > 120) {
+                if (!edad || edad < 18 || edad > 120) {
                     $('#edad').addClass('error');
                     $('#edadError').show();
                     isValid = false;
@@ -365,6 +373,12 @@
                 }
                 
                 if (!isValid) return;
+
+                // Validar aceptación de términos y condiciones
+                if (!$('#aceptaTerminos').is(':checked')) {
+                    showAlert('Debes aceptar los Términos, Condiciones y Políticas de Seguridad para registrarte.', 'error');
+                    return;
+                }
                 
                 // Mostrar loading
                 const $btn = $('#registerBtn');
