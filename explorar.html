@@ -454,7 +454,7 @@
             // ========== OBTENER CATEGORÍAS Y POSTS ==========
             async function fetchCategories() {
                 try {
-                    const response = await fetch('http://localhost:8000/categories');
+                    const response = await fetch('http://54.210.12.34:8000/categories');
                     categories = await response.json();
                     return categories;
                 } catch (error) {
@@ -476,7 +476,7 @@
 
             async function fetchPosts() {
                 try {
-                    const response = await fetch('http://localhost:8000/posts');
+                    const response = await fetch('http://54.210.12.34:8000/posts');
                     allPosts = await response.json();
                     return allPosts;
                 } catch (error) {

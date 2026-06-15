@@ -188,7 +188,7 @@
                 const token = localStorage.getItem('token');
                 if (token) {
                     $.ajax({
-                        url: 'http://localhost:8000/api/auth/verify',
+                        url: 'http://54.210.12.34:8000/api/auth/verify',
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` },
                         error: function() {
@@ -265,7 +265,7 @@
             // ========== FUNCIONES DE LA API ==========
             async function fetchAllPosts() {
                 try {
-                    const response = await fetch('http://localhost:8000/posts');
+                    const response = await fetch('http://54.210.12.34:8000/posts');
                     allPosts = await response.json();
                     return allPosts;
                 } catch (error) {
@@ -280,7 +280,7 @@
 
             async function fetchAllUsers() {
                 try {
-                    const response = await fetch('http://localhost:8000/users');
+                    const response = await fetch('http://54.210.12.34:8000/users');
                     allUsers = await response.json();
                     return allUsers;
                 } catch (error) {

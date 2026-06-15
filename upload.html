@@ -325,7 +325,7 @@
                 selectCategoria.html('<option value="">Cargando categorías...</option>');
                 
                 try {
-                    const response = await fetch('http://localhost:8000/categories');
+                    const response = await fetch('http://54.210.12.34:8000/categories');
                     if (response.ok) {
                         categories = await response.json();
                         
@@ -460,7 +460,7 @@
                 $('#uploadForm').hide();
                 
                 try {
-                    const response = await fetch('http://localhost:8000/posts', {
+                    const response = await fetch('http://54.210.12.34:8000/posts', {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`

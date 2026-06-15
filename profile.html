@@ -573,7 +573,7 @@
             // Cargar todos los usuarios de la API
             function loadAllUsers() {
                 return $.ajax({
-                    url: 'http://localhost:8000/users',
+                    url: 'http://54.210.12.34:8000/users',
                     method: 'GET',
                     success: function(users) {
                         allUsers = users;
@@ -624,7 +624,7 @@
                 $('#profileContent').hide();
 
                 $.ajax({
-                    url: 'http://localhost:8000/api/auth/me',
+                    url: 'http://54.210.12.34:8000/api/auth/me',
                     method: 'GET',
                     headers: { 'Authorization': `Bearer ${token}` },
                     success: function(response) {
@@ -665,7 +665,7 @@
 
             function loadUserPosts() {
                 $.ajax({
-                    url: 'http://localhost:8000/posts',
+                    url: 'http://54.210.12.34:8000/posts',
                     method: 'GET',
                     success: function(posts) {
                         const userPosts = posts.filter(post => post.autor_id === currentUser.id);
@@ -703,7 +703,7 @@
                 const newColor = avatarColors[newColorIndex];
                 
                 $.ajax({
-                    url: `http://localhost:8000/api/auth/users/${currentUser.id}`,
+                    url: `http://54.210.12.34:8000/api/auth/users/${currentUser.id}`,
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                     data: JSON.stringify({ avatar_color: newColor }),
@@ -789,7 +789,7 @@
                 $btn.text('Guardando...').prop('disabled', true);
                 
                 $.ajax({
-                    url: `http://localhost:8000/api/auth/users/${currentUser.id}`,
+                    url: `http://54.210.12.34:8000/api/auth/users/${currentUser.id}`,
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                     data: JSON.stringify(updateData),

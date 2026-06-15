@@ -4,7 +4,7 @@ $(document).ready(function() {
     // Función para obtener los posts del backend
     async function fetchPosts() {
         try {
-            const response = await fetch('http://localhost:8000/posts');
+            const response = await fetch('http://54.210.12.34:8000/posts');
             const posts = await response.json();
             
             // Limpiar contenedor

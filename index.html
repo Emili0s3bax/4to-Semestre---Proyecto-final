@@ -439,7 +439,7 @@
                 const token = localStorage.getItem('token');
                 if (token) {
                     $.ajax({
-                        url: 'http://localhost:8000/api/auth/verify',
+                        url: 'http://54.210.12.34:8000/api/auth/verify',
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` },
                         error: function() {
@@ -489,7 +489,7 @@
             // ========== OBTENER POSTS DE LA API ==========
             async function fetchPosts() {
                 try {
-                    let url = 'http://localhost:8000/posts';
+                    let url = 'http://54.210.12.34:8000/posts';
                     if (currentCategory) {
                         url += `?category=${encodeURIComponent(currentCategory)}`;
                     }

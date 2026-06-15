@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión - Publify</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="/css/settings-panel.css">
-    <link rel="stylesheet" href="/css/dark-mode.css">
+    <link rel="stylesheet" href="css/settings-panel.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
     <script src="settings-panel.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -283,7 +283,7 @@
             if (token) {
                 // Verificar si el token sigue siendo válido
                 $.ajax({
-                    url: 'http://localhost:8000/api/auth/verify',
+                    url: 'http://54.210.12.34:8000/api/auth/verify',
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -336,7 +336,7 @@
                 
                 // Llamar a la API
                 $.ajax({
-                    url: 'http://localhost:8000/api/auth/login',
+                    url: 'http://54.210.12.34:8000/api/auth/login',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
