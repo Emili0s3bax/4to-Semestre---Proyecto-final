@@ -109,6 +109,13 @@ def register(user_data: UsuarioCreate, session: SessionDep):
     """
     Registra un nuevo usuario en el sistema.
     """
+    # Validar edad mínima (18 años)
+    if user_data.edad < 18:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El registro y acceso está restringido a mayores de edad (18 años o más)."
+        )
+
     # Verificar si el username o email ya existen
     statement_username = select(Usuario).where(Usuario.username == user_data.username)
     statement_email = select(Usuario).where(Usuario.email == user_data.email)
